@@ -28,3 +28,4 @@ build:
 
   script:
     - "echo: Should build"
+    - "echo: Some other test"
