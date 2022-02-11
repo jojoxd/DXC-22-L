@@ -15,7 +15,7 @@ mirror-repository:
 
   script:
     - "echo 'TODO: Mirror Repository'"
-    - git pull --mirror https://github.com/jojoxd/DXC-22-L.git upstream
+    - git clone --mirror https://github.com/jojoxd/DXC-22-L.git upstream
     - cd upstream
     - git remote rm origin
     - git remote add origin ${CI_REPOSITORY_URL}
