@@ -1,0 +1,29 @@
+mirror-repository:
+  image: bitnami/git
+
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+
+  before_script:
+    - 'which ssh-agent || ( apt-get update -qy && apt-get install openssh-client -qqy )'
+    - eval `ssh-agent -s`
+    - echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "$SSH_PUBLIC_KEY" >> ~/.ssh/id_rsa.pub
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+  script:
+    - "echo 'TODO: Mirror Repository'"
+    - git pull --mirror https://github.com/jojoxd/DXC-22-L.git upstream
+    - cd upstream
+    - git remote rm origin
+    - git remote add origin ${CI_REPOSITORY_URL}
+    - git push --mirror
+
+build:
+  only:
+    - tags
+
+  script:
+    - "echo: Should build"
