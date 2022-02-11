@@ -4,3 +4,8 @@ cmake-build-debug
 __pycache__
 
 .idea
+
+
+
+# reinstall using `mbed deploy'
+mbed-os/
