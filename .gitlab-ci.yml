@@ -22,10 +22,21 @@ mirror-repository:
     - git push --prune --all
     - git push --prune --tags
 
+variables:
+  TARGET: NUCLEO_F303K8
+  TOOLCHAIN: GCC_ARM
+
 build:
-  only:
-    - tags
+  image: ghcr.io/armmbed/mbed-os-env:mbed-os-6-latest
+
+  parallel:
+    matrix:
+      - DXC_TEAM: [1, 2, 3]
+
+  artifacts:
+    paths:
+      - BUILD/${TARGET}/${TOOLCHAIN}
 
   script:
-    - "echo: Should build"
-    - "echo: Some other test"
+    - mbed deploy
+    - mbed compile -t ${TOOLCHAIN} -m ${TARGET} -D DXC_TEAM=${DXC_TEAM}
