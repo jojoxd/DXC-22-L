@@ -90,8 +90,8 @@ release:
 
   script:
     - gh auth login --with-token < ${GITHUB_TOKEN_FILE}
-    - gh release create ${CI_COMMIT_REF_NAME} -R ${GITHUB_REPO} --target "${CI_COMMIT_REF_SLUG}" -t "Release ${CI_COMMIT_REF_NAME}" --generate-notes
+    - gh release create release/${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} -R ${GITHUB_REPO} --target "${CI_COMMIT_REF_SLUG}" -t "Release ${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}" --generate-notes
 
-    - gh release upload ${CI_COMMIT_REF_NAME} -R ${GITHUB_REPO} ${CI_COMMIT_REF_SLUG} DXC-22-L-${CI_COMMIT_REF_NAME}-TEAM-1.bin
-    - gh release upload ${CI_COMMIT_REF_NAME} -R ${GITHUB_REPO} ${CI_COMMIT_REF_SLUG} DXC-22-L-${CI_COMMIT_REF_NAME}-TEAM-2.bin
-    - gh release upload ${CI_COMMIT_REF_NAME} -R ${GITHUB_REPO} ${CI_COMMIT_REF_SLUG} DXC-22-L-${CI_COMMIT_REF_NAME}-TEAM-3.bin
+    - gh release upload release/${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} -R ${GITHUB_REPO} DXC-22-L-${CI_COMMIT_REF_NAME}-TEAM-1.bin
+    - gh release upload release/${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} -R ${GITHUB_REPO} DXC-22-L-${CI_COMMIT_REF_NAME}-TEAM-2.bin
+    - gh release upload release/${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} -R ${GITHUB_REPO} DXC-22-L-${CI_COMMIT_REF_NAME}-TEAM-3.bin
