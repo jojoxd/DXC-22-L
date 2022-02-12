@@ -29,14 +29,20 @@ variables:
 build:
   image: ghcr.io/armmbed/mbed-os-env:mbed-os-6-latest
 
+  only:
+    - branches
+    - tags
+
   parallel:
     matrix:
       - DXC_TEAM: [1, 2, 3]
 
   artifacts:
     paths:
-      - BUILD/${TARGET}/${TOOLCHAIN}
+      - DXC-22-L-${CI_COMMIT_REF_SLUG}-TEAM-${DXC_TEAM}.bin
 
   script:
+    # @TODO: Update
     - mbed deploy
-    - mbed compile -t ${TOOLCHAIN} -m ${TARGET} -D DXC_TEAM=${DXC_TEAM}
+    - mbed compile -t ${TOOLCHAIN} -m ${TARGET} -D DXC_TEAM=${DXC_TEAM} -D VERSION_STR "${CI_COMMIT_REF_SLUG}"
+    - mv BUILD/${TARGET}/${TOOLCHAIN}/DXC-22-L.bin DXC-22-L-${CI_COMMIT_REF_SLUG}-TEAM-${DXC_TEAM}.bin
