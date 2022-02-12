@@ -38,6 +38,10 @@ setup:
   image: ghcr.io/armmbed/mbed-os-env:mbed-os-6-latest
   stage: setup
 
+  only:
+    - branches
+    - tags
+
   cache:
     key: mbed-libraries
     paths:
@@ -50,9 +54,8 @@ build:
   image: ghcr.io/armmbed/mbed-os-env:mbed-os-6-latest
   stage: build
 
-  only:
-    - branches
-    - tags
+  needs:
+    - job: setup
 
   parallel:
     matrix:
@@ -78,6 +81,8 @@ release:
   image: ubuntu:latest
   stage: release
 
+  # Requires Variable GITHUB_TOKEN to be set
+
   needs:
     - job: build
       artifacts: true
@@ -89,7 +94,6 @@ release:
     - dpkg -i gh-cli.deb
 
   script:
-    - gh auth login --with-token < ${GITHUB_TOKEN_FILE}
     - gh release create release/${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} -R ${GITHUB_REPO} --target "${CI_COMMIT_REF_SLUG}" -t "Release ${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}" --generate-notes
 
     - gh release upload release/${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} -R ${GITHUB_REPO} DXC-22-L-${CI_COMMIT_REF_NAME}-TEAM-1.bin
