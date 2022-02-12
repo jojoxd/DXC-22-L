@@ -1,5 +1,6 @@
 stages:
   - mirror
+  - setup
   - build
   - release
 
@@ -33,6 +34,18 @@ mirror-repository:
     - git push --prune --all
     - git push --prune --tags
 
+setup:
+  image: ghcr.io/armmbed/mbed-os-env:mbed-os-6-latest
+  stage: setup
+
+  cache:
+    key: mbed-libraries
+    paths:
+      - lib/
+
+  script:
+    - mbed deploy
+
 build:
   image: ghcr.io/armmbed/mbed-os-env:mbed-os-6-latest
   stage: build
@@ -44,6 +57,13 @@ build:
   parallel:
     matrix:
       - DXC_TEAM: [1, 2, 3]
+
+  cache:
+    key: mbed-libraries
+    paths:
+      - lib/
+
+    policy: pull
 
   artifacts:
     paths:
