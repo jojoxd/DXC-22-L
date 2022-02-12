@@ -51,7 +51,7 @@ build:
 
   script:
     - mbed deploy
-    - mbed compile -t ${TOOLCHAIN} -m ${TARGET} -D DXC_TEAM=${DXC_TEAM} -D VERSION_STR "${CI_COMMIT_REF_NAME}"
+    - mbed compile -t ${TOOLCHAIN} -m ${TARGET} -D DXC_TEAM=${DXC_TEAM} -D VERSION_STR=${CI_COMMIT_REF_NAME}
     - mv BUILD/${TARGET}/${TOOLCHAIN}/DXC-22-L.bin DXC-22-L-${CI_COMMIT_REF_NAME}-TEAM-${DXC_TEAM}.bin
 
 release:
