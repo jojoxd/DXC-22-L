@@ -1,3 +1,12 @@
+stages:
+  - build
+  - release
+
+variables:
+  TARGET: NUCLEO_F303K8
+  TOOLCHAIN: GCC_ARM
+  GITHUB_REPO: github.com/jojoxd/DXC-22-L
+
 mirror-repository:
   image: bitnami/git
 
@@ -15,19 +24,16 @@ mirror-repository:
 
   script:
     - "echo 'TODO: Mirror Repository'"
-    - git clone --mirror https://github.com/jojoxd/DXC-22-L.git upstream
+    - git clone --mirror https://${GITHUB_REPO}.git upstream
     - cd upstream
     - git remote rm origin
     - git remote add origin ssh://git@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git
     - git push --prune --all
     - git push --prune --tags
 
-variables:
-  TARGET: NUCLEO_F303K8
-  TOOLCHAIN: GCC_ARM
-
 build:
   image: ghcr.io/armmbed/mbed-os-env:mbed-os-6-latest
+  stage: build
 
   only:
     - branches
@@ -39,10 +45,31 @@ build:
 
   artifacts:
     paths:
-      - DXC-22-L-${CI_COMMIT_REF_SLUG}-TEAM-${DXC_TEAM}.bin
+      - DXC-22-L-${CI_COMMIT_REF_NAME}-TEAM-${DXC_TEAM}.bin
 
   script:
-    # @TODO: Update
     - mbed deploy
-    - mbed compile -t ${TOOLCHAIN} -m ${TARGET} -D DXC_TEAM=${DXC_TEAM} -D VERSION_STR "${CI_COMMIT_REF_SLUG}"
-    - mv BUILD/${TARGET}/${TOOLCHAIN}/DXC-22-L.bin DXC-22-L-${CI_COMMIT_REF_SLUG}-TEAM-${DXC_TEAM}.bin
+    - mbed compile -t ${TOOLCHAIN} -m ${TARGET} -D DXC_TEAM=${DXC_TEAM} -D VERSION_STR "${CI_COMMIT_REF_NAME}"
+    - mv BUILD/${TARGET}/${TOOLCHAIN}/DXC-22-L.bin DXC-22-L-${CI_COMMIT_REF_NAME}-TEAM-${DXC_TEAM}.bin
+
+release:
+  image: ubuntu:latest
+  stage: release
+
+  needs:
+    - job: build
+      artifacts: true
+
+  before_script:
+    - apt-get update
+    - apt-get install -y curl git
+    - curl -sL https://github.com/cli/cli/releases/download/v2.5.0/gh_2.5.0_linux_amd64.deb -o gh-cli.deb
+    - dpkg -i gh-cli.deb
+
+  script:
+    - gh auth login --with-token < ${GITHUB_TOKEN_FILE}
+    - gh release create ${CI_COMMIT_REF_NAME} -R ${GITHUB_REPO} --target "${CI_COMMIT_REF_SLUG}" -t "Release ${CI_COMMIT_REF_NAME}" --generate-notes
+
+    - gh release upload ${CI_COMMIT_REF_NAME} -R ${GITHUB_REPO} ${CI_COMMIT_REF_SLUG} DXC-22-L-${CI_COMMIT_REF_NAME}-TEAM-1.bin
+    - gh release upload ${CI_COMMIT_REF_NAME} -R ${GITHUB_REPO} ${CI_COMMIT_REF_SLUG} DXC-22-L-${CI_COMMIT_REF_NAME}-TEAM-2.bin
+    - gh release upload ${CI_COMMIT_REF_NAME} -R ${GITHUB_REPO} ${CI_COMMIT_REF_SLUG} DXC-22-L-${CI_COMMIT_REF_NAME}-TEAM-3.bin
