@@ -1,4 +1,5 @@
 stages:
+  - mirror
   - build
   - release
 
@@ -9,6 +10,7 @@ variables:
 
 mirror-repository:
   image: bitnami/git
+  stage: mirror
 
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
