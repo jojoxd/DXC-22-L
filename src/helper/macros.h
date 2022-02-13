@@ -25,3 +25,6 @@
 
 // Console Title
 #define CONSOLE_TITLE "DXC-22-L Team " STR(DXC_TEAM) " (version: " STR(VERSION_STR) " / " STR(VERSION_COMMIT_SHA) ")"
+
+
+#define THREAD [[noreturn]] void
