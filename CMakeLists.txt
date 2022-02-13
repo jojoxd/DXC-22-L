@@ -101,6 +101,7 @@ ADD_DEFINITIONS(
 INCLUDE_DIRECTORIES(
   src/helper
   src/console
+  src/util
   src
   lib/mbed-os/targets/TARGET_STM/TARGET_STM32F3/TARGET_STM32F303x8/TARGET_NUCLEO_F303K8
   lib/mbed-os/targets/TARGET_STM/TARGET_STM32F3/TARGET_STM32F303x8
@@ -2627,13 +2628,13 @@ ADD_EXECUTABLE(DXC-22-L
   lib/mbed-os/targets/TARGET_STM/us_ticker.c
   lib/mbed-os/targets/TARGET_STM/us_ticker_defines.h
   lib/mbed-os/targets/TARGET_STM/watchdog_api.c
-        mbed_config.h
-        mbed_config.h
-  src/console/console.cpp
-  src/console/console.h
+  mbed_config.h
+  src/console/console.hpp
   src/helper/config.h
   src/helper/macros.h
-  src/main.cpp src/util/util.h src/util/util.cpp)
+  src/main.cpp
+  src/util/util.hpp
+)
 SET_TARGET_PROPERTIES(DXC-22-L PROPERTIES ENABLE_EXPORTS 1)
 # add syslibs dependencies to create the correct linker order
 TARGET_LINK_LIBRARIES(DXC-22-L -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys)

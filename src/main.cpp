@@ -1,8 +1,7 @@
 #include <mbed.h>
-#include "helper/macros.h"
-#include <stdio.h>
 
-#include "console/console.h"
+#include "helper/macros.h"
+#include "console/console.hpp"
 
 struct LedThreadData
 {
@@ -20,16 +19,6 @@ THREAD led_thread(LedThreadData* data)
     }
 }
 
-template<typename ... Args>
-std::string string_fmt(const std::string& format, Args ... args)
-{
-    std::size_t size = std::snprintf(nullptr, 0, format.c_str(), args ...) + 1;
-    auto buf = std::make_unique<char[]>(size);
-    std::snprintf(buf.get(), size, format.c_str(), args...);
-
-    return std::string(buf.get(), buf.get() + size - 1);
-}
-
 int main()
 {
     Console& console = Console::getInstance();
@@ -44,7 +33,7 @@ int main()
     data.led = &led;
     data.console = &console;
     osStatus ret = t->start(callback(led_thread, &data));
-    console.writeln(string_fmt("Thread Started %02X", &ret));
+    console.writelnf("Thread Started %02X", &ret);
 
     #ifdef DXC_TEAM_1
         // Team 1 Custom Code
