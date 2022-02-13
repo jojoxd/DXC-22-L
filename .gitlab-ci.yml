@@ -11,7 +11,7 @@ variables:
 
 mirror-repository:
   image: bitnami/git
-  stage: mirror
+  stage: setup
 
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
@@ -38,9 +38,8 @@ setup:
   image: ghcr.io/armmbed/mbed-os-env:mbed-os-6-latest
   stage: setup
 
-  only:
-    - branches
-    - tags
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
 
   cache:
     key: mbed-libraries
