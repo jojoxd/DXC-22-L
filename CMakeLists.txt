@@ -39,6 +39,12 @@ SET(CMAKE_ASM_FLAGS "-g3 -x assembler-with-cpp -Wall -Wextra -Wno-unused-paramet
 SET(CMAKE_CXX_LINK_FLAGS "-Wl,--gc-sections -Wl,--wrap,main -Wl,--wrap,__malloc_r -Wl,--wrap,__free_r -Wl,--wrap,__realloc_r -Wl,--wrap,__memalign_r -Wl,--wrap,__calloc_r -Wl,--wrap,exit -Wl,--wrap,atexit -Wl,-n --specs=nano.specs -Wl,--wrap,printf -Wl,--wrap,sprintf -Wl,--wrap,snprintf -Wl,--wrap,vprintf -Wl,--wrap,vsprintf -Wl,--wrap,vsnprintf -Wl,--wrap,fprintf -Wl,--wrap,vfprintf -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=softfp -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -fmessage-length=0 -fno-exceptions -ffunction-sections -fdata-sections -funsigned-char -MMD -fomit-frame-pointer -Og -DMBED_DEBUG -DMBED_TRAP_ERRORS_ENABLED=1 -DMBED_RTOS_SINGLE_THREAD -D__NEWLIB_NANO -DMBED_MINIMAL_PRINTF -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=softfp -DMBED_ROM_START=0x8000000 -DMBED_ROM_SIZE=0x10000 -DMBED_RAM_START=0x20000000 -DMBED_RAM_SIZE=0x3000 -DMBED_BOOT_STACK_SIZE=1024 -DXIP_ENABLE=0 ")
 SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} ${LD_SYS_LIBS} -T ${CMAKE_BINARY_DIR}/DXC-22-L_pp.link_script.ld")
 
+IF(DXC_TEAM)
+  ADD_DEFINITIONS(
+    -DDXC_TEAM=${DXC_TEAM}
+  )
+ENDIF(DXC_TEAM)
+
 ADD_DEFINITIONS(
   -DARM_MATH_CM4
   -DDEVICE_ANALOGIN=1
@@ -428,7 +434,6 @@ INCLUDE_DIRECTORIES(
   lib/mbed-os/cmsis
   lib/mbed-os
   lib
-  /home/jojoxd/Development/School/DXC-22-L/lib/mbed-os
   .
   )
 
@@ -2628,8 +2633,7 @@ ADD_EXECUTABLE(DXC-22-L
   src/console/console.h
   src/helper/config.h
   src/helper/macros.h
-  src/main.cpp
-  )
+  src/main.cpp)
 SET_TARGET_PROPERTIES(DXC-22-L PROPERTIES ENABLE_EXPORTS 1)
 # add syslibs dependencies to create the correct linker order
 TARGET_LINK_LIBRARIES(DXC-22-L -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys)
@@ -2656,16 +2660,16 @@ add_custom_command(TARGET DXC-22-L POST_BUILD
 SET(MBED_BUILD_PROFILE "")
 STRING(TOLOWER ${CMAKE_BUILD_TYPE} LOWERCASE_CMAKE_BUILD_TYPE)
 IF(LOWERCASE_CMAKE_BUILD_TYPE MATCHES debug)
-    SET(MBED_BUILD_PROFILE "mbed-os/tools/profiles/debug.json")
+    SET(MBED_BUILD_PROFILE "lib/mbed-os/tools/profiles/debug.json")
 ELSEIF(LOWERCASE_CMAKE_BUILD_TYPE MATCHES relwithdebinfo)
-    SET(MBED_BUILD_PROFILE "mbed-os/tools/profiles/develop.json")
+    SET(MBED_BUILD_PROFILE "lib/mbed-os/tools/profiles/develop.json")
 ELSEIF(LOWERCASE_CMAKE_BUILD_TYPE MATCHES release)
-    SET(MBED_BUILD_PROFILE "mbed-os/tools/profiles/release.json")
+    SET(MBED_BUILD_PROFILE "lib/mbed-os/tools/profiles/release.json")
 ELSEIF(LOWERCASE_CMAKE_BUILD_TYPE MATCHES minsizerel)
-    SET(MBED_BUILD_PROFILE "mbed-os/tools/profiles/release.json")
+    SET(MBED_BUILD_PROFILE "lib/mbed-os/tools/profiles/release.json")
 ELSE()
   MESSAGE(WARNING "Build type '${CMAKE_BUILD_TYPE}' is unknown, using debug profile")
-  SET(MBED_BUILD_PROFILE "mbed-os/tools/profiles/debug.json")
+  SET(MBED_BUILD_PROFILE "lib/mbed-os/tools/profiles/debug.json")
 ENDIF()
 
 # optional custom target to build via mbed-cli

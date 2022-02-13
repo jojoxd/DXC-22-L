@@ -1,11 +1,15 @@
-BUILD
-cmake-build-debug
 
+# Build Caches
+BUILD
+cmake-build*
 __pycache__
 
+# IDE folders
 .idea
 
-
+# Log files
+openocd.log
 
 # reinstall using `mbed deploy'
-mbed-os/
+lib/*
+!lib/*.lib

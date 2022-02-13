@@ -2,17 +2,9 @@
 
 #include "config.h"
 
-// Teams Macros
+// Teams Macros (-D DXC_TEAM={1-3})
 #ifndef DXC_TEAM
-    #define DXC_TEAM 0
-#endif
-
-#if (DXC_TEAM == 0)
-    #warning Compiling all teams into singular binary
-
-    #define DXC_TEAM_1
-    #define DXC_TEAM_2
-    #define DXC_TEAM_3
+    #error Specify -D DXC_TEAM=(1-3) while compiling
 #endif
 
 #if (DXC_TEAM == 1)

@@ -3,6 +3,7 @@
 Console::Console()
     : serial(USBTX, USBRX, CONSOLE_BAUDRATE)
 {
+    serial.set_blocking(false);
 }
 
 void Console::write(const string& str)
