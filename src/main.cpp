@@ -1,13 +1,21 @@
 #include <mbed.h>
-#include "helper/macros.h"
 
-#include "console/console.h"
+#include "helper/macros.h"
+#include "console.hpp"
+
+void test1(Console* console)
+{
+    console->writeln("TEST1 TEST1 TEST1 >>>>>>>>>>>>>>>>>>>>");
+}
+
+void consoleInput(void* buffer)
+{
+    Console::getInstance().writelnf("consoleInput() called (%s)", (char*)buffer);
+}
 
 int main()
 {
     Console& console = Console::getInstance();
-
-    console.writeln(CONSOLE_TITLE);
 
     #ifdef DXC_TEAM_1
         // Team 1 Custom Code
@@ -23,6 +31,10 @@ int main()
         // Team 3 Custom Code
         console.writeln("Team 3");
     #endif
+
+    while(true) {
+        ThisThread::sleep_for(1000ms);
+    }
 
     return 0;
 }

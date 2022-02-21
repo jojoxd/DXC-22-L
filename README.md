@@ -1,8 +1,9 @@
-On linux, you need the following:
-- arm-none-eabi-cs-gcc
-- arm-none-eabi-newlib
-- pip package mbed-cli
+# Drive Exchange 2022
+
+Code voor aansturing van Teams 1, 2 en 3 uit bedrijf L.
+
+# Development
 
 Setup: `mbed deploy` (reinstalls deps)
 
-To Compile: `mbed compile -D DXC_TEAM=(1-3)`
+Compile: `mbed compile -D DXC_TEAM=(1-3)`
