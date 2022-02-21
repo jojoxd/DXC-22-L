@@ -1,5 +1,4 @@
 stages:
-  - mirror
   - setup
   - build
   - release
