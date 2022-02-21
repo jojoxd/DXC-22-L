@@ -2642,8 +2642,6 @@ ADD_EXECUTABLE(DXC-22-L
   src/helper/macros.h
   src/main.cpp
   src/util.hpp
-  src/eventthread.cpp
-  src/eventthread.h
 )
 SET_TARGET_PROPERTIES(DXC-22-L PROPERTIES ENABLE_EXPORTS 1)
 # add syslibs dependencies to create the correct linker order

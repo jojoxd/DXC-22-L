@@ -2,7 +2,6 @@
 
 #include "helper/macros.h"
 #include "console.hpp"
-#include "eventthread.h"
 
 void test1(Console* console)
 {
@@ -16,15 +15,7 @@ void consoleInput(void* buffer)
 
 int main()
 {
-    EventThread commandBus(osPriorityNormal1, "Command Bus");
-
     Console& console = Console::getInstance();
-
-    commandBus.start();
-
-    console.setupSigio(commandBus);
-
-    commandBus.add_trigger("console_input", callback(consoleInput));
 
     #ifdef DXC_TEAM_1
         // Team 1 Custom Code
@@ -43,9 +34,6 @@ int main()
 
     while(true) {
         ThisThread::sleep_for(1000ms);
-
-        int queueId1 = commandBus.push(callback(test1, &console));
-        console.writelnf("Queued Func with id %d", queueId1);
     }
 
     return 0;

@@ -312,7 +312,7 @@
 #define MBED_CONF_RTOS_MUTEX_NUM                                              0                                                                                                // set by library:rtos
 #define MBED_CONF_RTOS_PRESENT                                                1                                                                                                // set by library:rtos
 #define MBED_CONF_RTOS_SEMAPHORE_NUM                                          0                                                                                                // set by library:rtos
-#define MBED_CONF_RTOS_THREAD_NUM                                             4                                                                                                // set by library:rtos
+#define MBED_CONF_RTOS_THREAD_NUM                                             0                                                                                                // set by library:rtos
 #define MBED_CONF_RTOS_THREAD_STACK_SIZE                                      4096                                                                                             // set by library:rtos
 #define MBED_CONF_RTOS_THREAD_USER_STACK_SIZE                                 0                                                                                                // set by library:rtos
 #define MBED_CONF_RTOS_TIMER_NUM                                              0                                                                                                // set by library:rtos
