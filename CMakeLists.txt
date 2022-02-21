@@ -45,6 +45,14 @@ IF(DXC_TEAM)
   )
 ENDIF(DXC_TEAM)
 
+IF(MBED_MEM_TRACE)
+  ADD_DEFINITIONS(
+    -DMBED_MEM_TRACING_ENABLED
+    -DMBED_HEAP_STATS_ENABLED=1
+    -DMBED_STACK_STATS_ENABLED=1
+  )
+ENDIF(MBED_MEM_TRACE)
+
 ADD_DEFINITIONS(
   -DARM_MATH_CM4
   -DDEVICE_ANALOGIN=1
@@ -2629,11 +2637,13 @@ ADD_EXECUTABLE(DXC-22-L
   lib/mbed-os/targets/TARGET_STM/us_ticker_defines.h
   lib/mbed-os/targets/TARGET_STM/watchdog_api.c
   mbed_config.h
-  src/console/console.hpp
+  src/console.hpp
   src/helper/config.h
   src/helper/macros.h
   src/main.cpp
-  src/util/util.hpp
+  src/util.hpp
+  src/eventthread.cpp
+  src/eventthread.h
 )
 SET_TARGET_PROPERTIES(DXC-22-L PROPERTIES ENABLE_EXPORTS 1)
 # add syslibs dependencies to create the correct linker order

@@ -1,39 +1,30 @@
 #include <mbed.h>
 
 #include "helper/macros.h"
-#include "console/console.hpp"
+#include "console.hpp"
+#include "eventthread.h"
 
-struct LedThreadData
+void test1(Console* console)
 {
-    Console* console;
-    DigitalOut* led;
-};
+    console->writeln("TEST1 TEST1 TEST1 >>>>>>>>>>>>>>>>>>>>");
+}
 
-THREAD led_thread(LedThreadData* data)
+void consoleInput(void* buffer)
 {
-    while(true) {
-        *(data->led) = !*(data->led);
-        data->console->writeln("LED Toggle");
-
-        ThisThread::sleep_for(1000ms);
-    }
+    Console::getInstance().writelnf("consoleInput() called (%s)", (char*)buffer);
 }
 
 int main()
 {
+    EventThread commandBus(osPriorityNormal1, "Command Bus");
+
     Console& console = Console::getInstance();
 
-    console.writeln(CONSOLE_TITLE);
+    commandBus.start();
 
-    DigitalOut led(LED1);
+    console.setupSigio(commandBus);
 
-    auto t = new Thread(osPriorityNormal1, 1024, nullptr, "TestThread");
-
-    LedThreadData data;
-    data.led = &led;
-    data.console = &console;
-    osStatus ret = t->start(callback(led_thread, &data));
-    console.writelnf("Thread Started %02X", &ret);
+    commandBus.add_trigger("console_input", callback(consoleInput));
 
     #ifdef DXC_TEAM_1
         // Team 1 Custom Code
@@ -50,13 +41,11 @@ int main()
         console.writeln("Team 3");
     #endif
 
-    int count = 0;
     while(true) {
-        console.writelnf("Led Status: %d %d", (int)led, count++);
-        ThisThread::sleep_for(500ms);
+        ThisThread::sleep_for(1000ms);
 
-        Thread::State state = t->get_state();
-        console.writelnf("Thread State: %d", state);
+        int queueId1 = commandBus.push(callback(test1, &console));
+        console.writelnf("Queued Func with id %d", queueId1);
     }
 
     return 0;
