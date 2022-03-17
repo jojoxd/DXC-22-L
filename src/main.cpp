@@ -2,6 +2,7 @@
 
 #include "helper/macros.h"
 #include "console.hpp"
+#include "SteeringController.h"
 
 void test1(Console* console)
 {
@@ -17,6 +18,8 @@ int main()
 {
     Console& console = Console::getInstance();
 
+    SteeringController sc(CNY70_LEFT, CNY70_CENTER, CNY70_RIGHT);
+
     #ifdef DXC_TEAM_1
         // Team 1 Custom Code
         console.writeln("Team 1");
@@ -27,12 +30,17 @@ int main()
         console.writeln("Team 2");
     #endif
 
+        InterruptIn test(A2);
+        test.read()
+
     #ifdef DXC_TEAM_3
         // Team 3 Custom Code
         console.writeln("Team 3");
     #endif
 
     while(true) {
+        // sc.getBias();
+
         ThisThread::sleep_for(1000ms);
     }
 

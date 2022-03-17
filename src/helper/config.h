@@ -11,3 +11,9 @@
 #ifndef VERSION_COMMIT_SHA
     #define VERSION_COMMIT_SHA dev
 #endif
+
+
+// These depend on generalized PCB
+#define CNY70_LEFT PinName::A0
+#define CNY70_CENTER PinName::A2
+#define CNY70_RIGHT PinName::A3
