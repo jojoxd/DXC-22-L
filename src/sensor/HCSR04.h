@@ -2,9 +2,24 @@
 
 #include <mbed.h>
 
+/**
+ * Minimum readable distance of sensor
+ */
 #define HCSR04_MIN_RANGE 2.0f
+
+/**
+ * Maximum readable distance of sensor
+ */
 #define HCSR04_MAX_RANGE 400.0f
 
+/**
+ * Speed of sound in [cm/us] (centimeter per microsecond)
+ */
+#define HCSR04_SPEED_OF_SOUND_CM_US 0.0343f
+
+/**
+ * Timeout of sensor reading
+ */
 #ifndef HCSR04_TIMEOUT
     #define HCSR04_TIMEOUT 25ms
 #endif
@@ -17,8 +32,6 @@
  *
  * @NOTE: If the measured object is more then 15 degrees rotated,
  *        the sensor will NOT give an accurate reading.
- *
- * @TODO: Cleanup variables / etc.
  */
 class HCSR04
 {

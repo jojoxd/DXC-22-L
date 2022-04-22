@@ -35,7 +35,7 @@ void HCSR04::stopTimer()
         m_elapsedTime = m_timer.elapsed_time();
 
         m_distance = util::math::clamp(
-            m_elapsedTime.count() * 0.0343f, // m_elapsedTime / 58.0f
+            (m_elapsedTime.count() / 2.0f) * HCSR04_SPEED_OF_SOUND_CM_US,
             m_minDistance, 
             m_maxDistance
         );
@@ -51,7 +51,7 @@ void HCSR04::stopTimer()
 
 void HCSR04::turnOffTrigger()
 {
-    m_trigger = 0; // why is this needed?
+    m_trigger = 0;
 }
 
 void HCSR04::startMeasurement()
