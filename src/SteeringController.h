@@ -6,22 +6,11 @@
 class SteeringController
 {
 public:
-    enum Bias
-    {
-        Left,
-        Center,
-        Right,
-
-        LowLeft,
-        LowRight,
-
-        Unknown,
-    };
-
-public:
     SteeringController(PinName left, PinName center, PinName right);
 
-    SteeringController::Bias getBias();
+    float getBias();
+
+    void doSteering();
 
 protected:
     CNY70 m_left;

@@ -5,35 +5,19 @@ SteeringController::SteeringController(PinName left, PinName center, PinName rig
 {
 }
 
-SteeringController::Bias SteeringController::getBias()
+float SteeringController::getBias()
 {
-    CNY70::Surface left = m_left.getSurface();
-    CNY70::Surface center = m_center.getSurface();
-    CNY70::Surface right = m_right.getSurface();
+    CNY70::SurfaceData left = m_left.getSurfaceData();
+    CNY70::SurfaceData center = m_center.getSurfaceData();
+    CNY70::SurfaceData right = m_right.getSurfaceData();
 
-    if(left == CNY70::Surface::Light) {
-        if(center == CNY70::Surface::Light) {
-            // Low Bias Left
-            return LowLeft;
-        }
+    // Domain: [-1.0f .. 1.0f] == [Max Left .. Max Right]
+    return -1.0f;
+}
 
-        // High Bias Left
-        return Left;
-    }
+void SteeringController::doSteering()
+{
+    float bias = getBias();
 
-    if(right == CNY70::Surface::Light) {
-        if(center == CNY70::Surface::Light) {
-            // Low Bias Right
-            return LowRight;
-        }
-
-        // High Bias Right
-        return Right;
-    }
-
-    if(center == CNY70::Surface::Light) {
-        return Center;
-    }
-
-    return Unknown;
+    // @TODO
 }

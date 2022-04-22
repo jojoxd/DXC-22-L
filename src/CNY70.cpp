@@ -19,3 +19,11 @@ CNY70::operator double()
 {
     return getVoltage();
 }
+
+CNY70::SurfaceData CNY70::getSurfaceData()
+{
+    return {
+        .surface = getSurface(),
+        .voltage = getVoltage(),
+    };
+}
