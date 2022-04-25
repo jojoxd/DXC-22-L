@@ -6,8 +6,13 @@
 class MotorFunction
 {
 public:
-    explicit MotorFunction(MotorDriver* driver, std::chrono::microseconds interval, int reps, Callback<void(MotorDriver*, int)> cb)
-        : m_driver(driver), m_callback(cb), m_interval(interval / reps), m_ticker(), m_reps(reps)
+    /**
+     * Creates a MotorFunction
+     *
+     * @NOTE: the callback will be executed in an ISR Context (From Ticker)
+     */
+    explicit MotorFunction(MotorDriver* driver, std::chrono::microseconds duration, int reps, Callback<void(MotorDriver*, int)> cb)
+        : m_driver(driver), m_callback(cb), m_interval(duration / reps), m_ticker(), m_reps(reps)
     {
     }
 
@@ -40,6 +45,9 @@ protected:
     }
 
 public:
+    /**
+     * Start this MotorFunction
+     */
     void start()
     {
         m_ticker.attach(callback(this, &MotorFunction::onTick), m_interval);
@@ -47,6 +55,9 @@ public:
         m_isRunning = true;
     }
 
+    /**
+     * Stop/cancel this MotorFunction
+     */
     void stop()
     {
         m_ticker.detach();
@@ -55,6 +66,9 @@ public:
         m_isRunning = false;
     }
 
+    /**
+     * Check if this MotorFunction is Running
+     */
     bool isRunning() const
     {
         return m_isRunning;

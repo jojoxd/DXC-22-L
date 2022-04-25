@@ -38,6 +38,9 @@ protected:
     EventQueue m_queue;
 
 public:
+    /**
+     * Write an unformatted string under context
+     */
     void write(const string& ctx, const string& str)
     {
         int millisFromEpoch = (int)Kernel::Clock::now().time_since_epoch().count();
@@ -54,17 +57,34 @@ public:
         m_serial.write(formatted.c_str(), formatted.length());
     }
 
-    void writeln(const string& str)
+    /**
+     * Write an unformatted string under the {ThreadName} context
+     */
+    void write(const string& str)
     {
-        write(ThisThread::get_name(), str + "\r\n");
+        write(ThisThread::get_name(), str);
     }
 
+    /**
+     * Write un-formatted line
+     */
+    void writeln(const string& str)
+    {
+        write(str + "\r\n");
+    }
+
+    /**
+     * Write formatted string
+     */
     template<typename... Args>
     void writef(const string& str, Args... args)
     {
-        write(ThisThread::get_name(), util::string_fmt(str, args...));
+        write(util::string_fmt(str, args...));
     }
 
+    /**
+     * Write formatted line
+     */
     template<typename... Args>
     void writelnf(const string& str, Args... args)
     {
@@ -83,10 +103,10 @@ public:
         m_queue.call(callback([](const char* in_ctx, const char* in_str, Args... args) {
             Console& console = Console::getInstance();
 
-            const string ctx = util::string_fmt("ISR:%s", in_ctx);
-            const string msg = util::string_fmt("%s\r\n", util::string_fmt(in_str, args...).c_str());
+            const string out_ctx = util::string_fmt("ISR:%s", in_ctx);
+            const string out_msg = util::string_fmt("%s\r\n", util::string_fmt(in_str, args...).c_str());
 
-            console.write(ctx, msg);
+            console.write(out_ctx, out_msg);
         }), ctx, str, args...);
     }
 
