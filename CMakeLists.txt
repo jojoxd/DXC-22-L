@@ -2642,7 +2642,7 @@ ADD_EXECUTABLE(DXC-22-L
   src/helper/macros.h
   src/main.cpp
   src/util.hpp
-        src/CNY70.cpp src/CNY70.h src/SteeringController.cpp src/SteeringController.h src/sensor/HCSR04.h src/sensor/HCSR04.h src/sensor/HCSR04.cpp)
+        src/CNY70.cpp src/CNY70.h src/SteeringController.cpp src/SteeringController.h src/sensor/HCSR04.h src/sensor/HCSR04.h src/sensor/HCSR04.cpp src/driver/MotorDriver.h src/driver/MotorDriver.cpp src/driver/MotorFunction.h)
 SET_TARGET_PROPERTIES(DXC-22-L PROPERTIES ENABLE_EXPORTS 1)
 # add syslibs dependencies to create the correct linker order
 TARGET_LINK_LIBRARIES(DXC-22-L -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys)
