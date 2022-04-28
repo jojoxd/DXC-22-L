@@ -18,6 +18,7 @@ public:
 
 protected:
     PwmOut m_pwmSignal;
+
     DigitalOut m_direction;
 
 public:

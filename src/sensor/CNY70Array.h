@@ -7,10 +7,12 @@
 class CNY70Array
 {
 public:
-    explicit CNY70Array(PinName leftPin, PinName centerPin, PinName rightPin)
+    CNY70Array(PinName leftPin, PinName centerPin, PinName rightPin)
             : m_leftSensor(leftPin), m_centerSensor(centerPin), m_rightSensor(rightPin)
     {
     }
+
+    ~CNY70Array() = default;
 
 protected:
     CNY70 m_leftSensor;

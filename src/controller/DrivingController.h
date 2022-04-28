@@ -1,10 +1,10 @@
 #pragma once
 
 #include <mbed.h>
-#include <driver/MotorFunction.h>
 
 #include "config.h"
 #include "sensor/CNY70Array.h"
+#include "driver/MotorFunction.h"
 
 #ifndef DRCTL_TICKER_INTERVAL
     #define DRCTL_TICKER_INTERVAL 1'000us
@@ -13,11 +13,16 @@
 class DrivingController
 {
 public:
-    explicit DrivingController(MotorDriver* leftDriver, MotorDriver* rightDriver)
+    DrivingController(MotorDriver* leftDriver, MotorDriver* rightDriver)
         : m_sensorArray(CNY70_LEFT, CNY70_CENTER, CNY70_RIGHT),
           m_leftDriver(leftDriver), m_rightDriver(rightDriver),
           m_ticker(), m_interval(DRCTL_TICKER_INTERVAL)
     {
+    }
+
+    ~DrivingController()
+    {
+        m_ticker.detach();
     }
 
 protected:
@@ -30,15 +35,24 @@ protected:
 
     std::chrono::microseconds m_interval;
 
+    bool m_isRunning = false;
+
 public:
     void start()
     {
         m_ticker.attach(callback(this, &DrivingController::handleDriving), m_interval);
+        m_isRunning = true;
     }
 
     void stop()
     {
         m_ticker.detach();
+        m_isRunning = false;
+    }
+
+    bool isRunning() const
+    {
+        return m_isRunning;
     }
 
 protected:

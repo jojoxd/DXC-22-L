@@ -1,6 +1,7 @@
 #pragma once
 
 #include <mbed.h>
+
 #include "MotorDriver.h"
 
 using MotorFunctionCallback = mbed::Callback<void(MotorDriver*, int)>;
@@ -13,9 +14,12 @@ public:
      *
      * @NOTE: the callback will be executed in an ISR Context (From Ticker)
      */
-    explicit MotorFunction(MotorDriver* driver, std::chrono::microseconds duration, int reps, MotorFunctionCallback cb)
-        : m_driver(driver), m_callback(cb), m_interval(duration / reps), m_ticker(), m_reps(reps), m_isInfinite(false)
+    MotorFunction(MotorDriver* driver, std::chrono::microseconds duration, int reps, MotorFunctionCallback cb)
+        : m_driver(driver), m_callback(cb), m_interval(duration / reps), m_ticker()
     {
+        m_reps = reps;
+
+        m_isInfinite = false;
     }
 
     /**
@@ -23,10 +27,15 @@ public:
      *
      * @NOTE: the callback will be executed in an ISR Context (From Ticker)
      */
-    explicit MotorFunction(MotorDriver* driver, std::chrono::microseconds interval, MotorFunctionCallback cb)
-        : m_driver(driver), m_callback(cb), m_interval(interval), m_ticker(), m_reps(0), m_isInfinite(true)
+    MotorFunction(MotorDriver* driver, std::chrono::microseconds interval, MotorFunctionCallback cb)
+        : m_driver(driver), m_callback(cb), m_interval(interval), m_ticker()
     {
+        m_reps = 0;
+
+        m_isInfinite = true;
     }
+
+    ~MotorFunction() = default;
 
 protected:
     MotorDriver* m_driver;

@@ -18,7 +18,8 @@ class Console
 {
 public:
     Console()
-        : m_serial(CONSOLE_TX, CONSOLE_RX, CONSOLE_BAUDRATE), m_queue(CONSOLE_ISR_QUEUE_SZ * CONSOLE_ISR_EVENT_SZ)
+        : m_serial(CONSOLE_TX, CONSOLE_RX, CONSOLE_BAUDRATE),
+          m_queue(CONSOLE_ISR_QUEUE_SZ * CONSOLE_ISR_EVENT_SZ)
     {
         m_serial.set_blocking(true);
     }
@@ -41,12 +42,12 @@ public:
     /**
      * Write an unformatted string under context
      */
-    void write(const string& ctx, const string& str)
+    void write(const std::string& ctx, const std::string& str)
     {
         int millisFromEpoch = (int)Kernel::Clock::now().time_since_epoch().count();
         string context = ctx;
 
-        const string formatted = util::string_fmt(
+        const std::string formatted = util::string_fmt(
             "[% 4d.%03d] %s: %s",
             millisFromEpoch / 1000,
             millisFromEpoch % 1000,
@@ -60,7 +61,7 @@ public:
     /**
      * Write an unformatted string under the {ThreadName} context
      */
-    void write(const string& str)
+    void write(const std::string& str)
     {
         write(ThisThread::get_name(), str);
     }
@@ -68,7 +69,7 @@ public:
     /**
      * Write un-formatted line
      */
-    void writeln(const string& str)
+    void writeln(const std::string& str)
     {
         write(str + "\r\n");
     }
@@ -77,7 +78,7 @@ public:
      * Write formatted string
      */
     template<typename... Args>
-    void writef(const string& str, Args... args)
+    void writef(const std::string& str, Args... args)
     {
         write(util::string_fmt(str, args...));
     }
@@ -86,7 +87,7 @@ public:
      * Write formatted line
      */
     template<typename... Args>
-    void writelnf(const string& str, Args... args)
+    void writelnf(const std::string& str, Args... args)
     {
         writeln(util::string_fmt(str, args...));
     }
@@ -103,8 +104,8 @@ public:
         m_queue.call(callback([](const char* in_ctx, const char* in_str, Args... args) {
             Console& console = Console::getInstance();
 
-            const string out_ctx = util::string_fmt("ISR:%s", in_ctx);
-            const string out_msg = util::string_fmt("%s\r\n", util::string_fmt(in_str, args...).c_str());
+            const std::string out_ctx = util::string_fmt("ISR:%s", in_ctx);
+            const std::string out_msg = util::string_fmt("%s\r\n", util::string_fmt(in_str, args...).c_str());
 
             console.write(out_ctx, out_msg);
         }), ctx, str, args...);

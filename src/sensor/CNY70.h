@@ -22,15 +22,16 @@ public:
 
 public:
     explicit CNY70(PinName pin);
-    CNY70(CNY70& copy) = delete;
+
     ~CNY70() = default;
 
+protected:
+    AnalogIn m_sensor;
+
+public:
     double getVoltage();
     CNY70::Surface getSurface();
     CNY70::SurfaceData getSurfaceData();
 
     explicit operator double();
-
-protected:
-    AnalogIn m_sensor;
 };

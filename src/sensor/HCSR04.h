@@ -38,6 +38,8 @@ class HCSR04
 public:
     HCSR04(PinName echoPin, PinName triggerPin);
 
+    ~HCSR04() = default;
+
 public:
     /**
      * Start the measurement
