@@ -2651,7 +2651,7 @@ ADD_EXECUTABLE(DXC-22-L
   src/driver/MotorDriver.h
   src/driver/MotorDriver.cpp
   src/driver/MotorFunction.h
-  src/controller/DrivingController.h)
+  src/controller/DrivingController.h example/ex_HCSR04_Implementation.cpp)
 SET_TARGET_PROPERTIES(DXC-22-L PROPERTIES ENABLE_EXPORTS 1)
 # add syslibs dependencies to create the correct linker order
 TARGET_LINK_LIBRARIES(DXC-22-L -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys)
