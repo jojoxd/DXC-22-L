@@ -1,31 +1,26 @@
 #include "MotorDriver.h"
 
 MotorDriver::MotorDriver(PinName pwmPin, PinName directionPin)
-    : m_pwm(pwmPin), m_direction(directionPin)
+    : m_pwmSignal(pwmPin), m_direction(directionPin)
 {
-    m_pwm.period_us(500);
+    m_pwmSignal.period_us(500);
 }
 
-float bezier(float x, float u0, float u1, float u2, float u3)
+void MotorDriver::setSpeed(float speed)
 {
-    return (u0 * powf(1-x, 3)) + (3 * u1 * powf(1 - x, 2)) + (2 * u2 * (1 - x) * powf(x, 2)) + (u3 * powf(x, 3));
-}
+    if(speed < 0.0f) {
+        m_direction = 0;
+    } else {
+        m_direction = 1;
+    }
 
-void MotorDriver::setSpeed(float percent)
-{
-//    auto between = 25.0f + (bezier(percent / 100.0f, 0.0f, 0.0f, 1.0f, 1.0f) * 75.0f);
-//
-//    m_pwm = between / 100.0f;
-
-     m_pwm = percent / 100.0f;
+     m_pwmSignal = fabs(speed);
 }
 
 float MotorDriver::getSpeed()
 {
-    return m_pwm;
-}
+    if(m_direction.read() == 0)
+        return 0.0f - m_pwmSignal.read();
 
-void MotorDriver::setDirection(MotorDriver::Direction direction)
-{
-    m_direction = direction;
+    return m_pwmSignal.read();
 }

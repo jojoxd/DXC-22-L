@@ -16,19 +16,16 @@ public:
 
     ~MotorDriver() = default;
 
-    enum Direction
-    {
-        ClockWise = 0,
-        CounterClockWise = 1,
-    };
-
 protected:
-    PwmOut m_pwm;
+    PwmOut m_pwmSignal;
     DigitalOut m_direction;
 
 public:
-    void setSpeed(float percent);
+    /**
+     * Sets the speed of this motor
+     *
+     * Domain is [-1.0f .. 1.0f]
+     */
+    void setSpeed(float speed);
     float getSpeed();
-
-    void setDirection(Direction direction);
 };

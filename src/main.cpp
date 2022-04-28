@@ -5,7 +5,6 @@
 #include "sensor/HCSR04.h"
 #include "helper/macros.h"
 #include "console.hpp"
-#include "SteeringController.h"
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
@@ -13,8 +12,6 @@
 int main()
 {
     Console& console = Console::getInstance();
-
-    SteeringController sc(CNY70_LEFT, CNY70_CENTER, CNY70_RIGHT);
 
     #ifdef DXC_TEAM_1
         // Team 1 Custom Code
@@ -36,14 +33,9 @@ int main()
 
     InterruptIn btn(D13, PullDown);
     MotorDriver driver(D10, D12);
-    MotorDriver::Direction dir = MotorDriver::ClockWise;
-
-    btn.rise([&]() {
-        dir = dir == MotorDriver::ClockWise ? MotorDriver::CounterClockWise : MotorDriver::ClockWise;
-    });
 
     MotorFunction rampUp(&driver, 1'000'000us, 32, callback([&](MotorDriver* drv, int currentRep) {
-        auto percent = ((float)currentRep / 32.0f) * 100.0f;
+        auto percent = ((float)currentRep / 32.0f);
 
         console.ISR_writelnf("Ramp UP", "%d => %d%%", currentRep, (int)percent);
 
@@ -51,7 +43,7 @@ int main()
     }));
 
     MotorFunction rampDown(&driver, 1'000'000us, 32, [&](MotorDriver* drv, int currentRep) {
-        auto percent = ((32.0f - (float)currentRep) / 32.0f) * 100.0f;
+        auto percent = ((32.0f - (float)currentRep) / 32.0f);
 
         console.ISR_writelnf("Ramp DOWN", "%d = %d%%", currentRep, (int)percent);
 
@@ -59,15 +51,18 @@ int main()
     });
 
     while(true) {
-        rampUp.start();
-        while(rampUp.isRunning());
-
-        rampDown.start();
-        while(rampDown.isRunning());
-
-        console.writeln("End while()");
+//        rampUp.start();
+//        while(rampUp.isRunning());
+//
+//        ThisThread::sleep_for(500ms);
+//
+//        rampDown.start();
+//        while(rampDown.isRunning());
+//
+//        console.writeln("End while()");
 
         console.ISR_handle();
+        ThisThread::sleep_for(250ms);
     }
 
 //    while(true) {

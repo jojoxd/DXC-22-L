@@ -3,16 +3,28 @@
 #include <mbed.h>
 #include "MotorDriver.h"
 
+using MotorFunctionCallback = mbed::Callback<void(MotorDriver*, int)>;
+
 class MotorFunction
 {
 public:
     /**
-     * Creates a MotorFunction
+     * Creates a static-length MotorFunction
      *
      * @NOTE: the callback will be executed in an ISR Context (From Ticker)
      */
-    explicit MotorFunction(MotorDriver* driver, std::chrono::microseconds duration, int reps, Callback<void(MotorDriver*, int)> cb)
-        : m_driver(driver), m_callback(cb), m_interval(duration / reps), m_ticker(), m_reps(reps)
+    explicit MotorFunction(MotorDriver* driver, std::chrono::microseconds duration, int reps, MotorFunctionCallback cb)
+        : m_driver(driver), m_callback(cb), m_interval(duration / reps), m_ticker(), m_reps(reps), m_isInfinite(false)
+    {
+    }
+
+    /**
+     * Creates an infinite MotorFunction
+     *
+     * @NOTE: the callback will be executed in an ISR Context (From Ticker)
+     */
+    explicit MotorFunction(MotorDriver* driver, std::chrono::microseconds interval, MotorFunctionCallback cb)
+        : m_driver(driver), m_callback(cb), m_interval(interval), m_ticker(), m_reps(0), m_isInfinite(true)
     {
     }
 
@@ -31,12 +43,14 @@ protected:
 
     bool m_isRunning = false;
 
+    bool m_isInfinite = false;
+
 protected:
     void onTick()
     {
         m_ticks += 1;
 
-        if(m_ticks > m_reps) {
+        if(!m_isInfinite && m_ticks > m_reps) {
             stop();
             return;
         }
@@ -72,5 +86,10 @@ public:
     bool isRunning() const
     {
         return m_isRunning;
+    }
+
+    bool isInfinite() const
+    {
+        return m_isInfinite;
     }
 };
