@@ -1,16 +1,18 @@
 #include <mbed.h>
 
-//#include "driver/MotorDriver.h"
-//#include "sensor/HCSR04.h"
+#include "sensor/HCSR04.h"
+#include "controller/DrivingController.h"
+#include "driver/MotorDriver.h"
 #include "helper/macros.h"
-//#include "console.hpp"
+#include "console.hpp"
+#include "sensor/CNY70Array.h"
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
 
 int main()
 {
-    //Console& console = Console::getInstance();
+    Console& console = Console::getInstance();
 
     #ifdef DXC_TEAM_1
         // Team 1 Custom Code
@@ -27,31 +29,22 @@ int main()
 //        console.writeln("Team 3");
     #endif
 
-//    HCSR04 sensor(D6, D7);
-//    sensor.setRanges(5.0f, 25.0f);
-//
-//    InterruptIn btn(D13, PullDown);
-//    MotorDriver driver(D10, D12);
+    MotorDriver leftMotor(D11, D12);
+    MotorDriver rightMotor(D9, D10);
+    HCSR04 distanceSensor(D7, D8);
 
-//    util::MovingAverage<float, 5, int> avg;
-
-    int test[256] = {0};
-
-//    while(true) {
-//        sensor.startMeasurement();
-//        while(!sensor.isNewDataReady()); // Wait for sensor data
-//
-//        float distanceInCentimeters = sensor.getDistance();
-//        int average = avg.next(distanceInCentimeters);
-//
-//        console.writelnf("Distance: %d cm (avg = %d cm) use test: %d", (int)distanceInCentimeters, average, test[0]);
-//
-//        ThisThread::sleep_for(1000ms);
-//    }
+    DrivingController drivingController(&leftMotor, &rightMotor);
+    drivingController.start();
+    CNY70Array sensorArray(CNY70_LEFT, CNY70_CENTER, CNY70_RIGHT);
 
     while(true) {
-//        console.ISR_handle();
-        ThisThread::sleep_for(250ms);
+        drivingController.setBias(sensorArray.getBias());
+
+        float leftSpeedPct = leftMotor.getSpeed() * 100.0f;
+        float rightSpeedPct = rightMotor.getSpeed() * 100.0f;
+        console.writelnf("Left Speed: %d%%, Right Speed: %d%%", (int)leftSpeedPct, (int)rightSpeedPct);
+
+        ThisThread::sleep_for(10ms);
     }
 
     return 0;

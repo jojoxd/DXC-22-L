@@ -10,8 +10,8 @@ class CNY70
 public:
     enum Surface
     {
-        Light,
-        Dark,
+        Light = 0,
+        Dark  = 1,
     };
 
     struct SurfaceData

@@ -14,15 +14,28 @@ public:
 
     ~CNY70Array() = default;
 
+    enum Bias
+    {
+        Left = 0,
+        Center = 1,
+        Right = 2,
+    };
+
 protected:
     CNY70 m_leftSensor;
     CNY70 m_centerSensor;
     CNY70 m_rightSensor;
 
 public:
-    float getBias()
+    Bias getBias()
     {
-        return -1.0f;
+        if(m_leftSensor.getSurface() == CNY70::Surface::Light)
+            return Left;
+
+        if(m_rightSensor.getSurface() == CNY70::Surface::Light)
+            return Right;
+
+        return Center;
     }
 
     bool isOnLine()

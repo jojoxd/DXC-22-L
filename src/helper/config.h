@@ -1,5 +1,7 @@
 #pragma once
 
+#include "macros.h"
+
 /**
  * SECTION: Build System
  */
@@ -33,9 +35,21 @@
  */
 
 // Driver Controller Ticker interval
-#define DRCTL_TICKER_INTERVAL 1'000us
+#define DRCTL_TICKER_INTERVAL 100ms
 
-// These depend on generalized PCB
-#define CNY70_LEFT PinName::A0
-#define CNY70_CENTER PinName::A2
-#define CNY70_RIGHT PinName::A3
+#if DXC_TEAM == 3
+    #define CNY70_ANALOG
+
+    #define CNY70_LEFT PinName::A0
+    #define CNY70_CENTER PinName::A1
+    #define CNY70_RIGHT PinName::A2
+#else
+    // These depend on generalized PCB
+    #define CNY70_LEFT PinName::A0
+    #define CNY70_CENTER PinName::A2
+    #define CNY70_RIGHT PinName::A3
+#endif
+
+#ifdef DXC_TEAM_3
+
+#endif

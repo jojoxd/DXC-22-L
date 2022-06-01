@@ -10,13 +10,15 @@
     #define DRCTL_TICKER_INTERVAL 1'000us
 #endif
 
+#define SPEED_FAST 1.0f
+#define SPEED_SLOW 0.8f
+
 class DrivingController
 {
 public:
     DrivingController(MotorDriver* leftDriver, MotorDriver* rightDriver)
-        : m_sensorArray(CNY70_LEFT, CNY70_CENTER, CNY70_RIGHT),
-          m_leftDriver(leftDriver), m_rightDriver(rightDriver),
-          m_ticker(), m_interval(DRCTL_TICKER_INTERVAL)
+        : m_leftDriver(leftDriver), m_rightDriver(rightDriver),
+          m_ticker(), m_ticks(0), m_interval(DRCTL_TICKER_INTERVAL)
     {
     }
 
@@ -26,17 +28,19 @@ public:
     }
 
 protected:
-    CNY70Array m_sensorArray;
-
     MotorDriver* m_leftDriver;
     MotorDriver* m_rightDriver;
 
     Ticker m_ticker;
+    int m_ticks;
 
     std::chrono::microseconds m_interval;
 
     bool m_isRunning = false;
 
+    CNY70Array::Bias m_bias = CNY70Array::Bias::Center;
+    float m_speedLeft = 1.0f;
+    float m_speedRight = 1.0f;
 public:
     void start()
     {
@@ -55,6 +59,11 @@ public:
         return m_isRunning;
     }
 
+    void setBias(CNY70Array::Bias bias)
+    {
+        m_bias = bias;
+    }
+
 protected:
     /**
      * Handle Sensor Readout => MotorDriver conversion
@@ -63,12 +72,24 @@ protected:
      */
     void handleDriving()
     {
-        // @TODO: Readout of sensor array, execute speed changes on MotorDriver leftDriver & rightDriver.
+        m_ticks++;
 
-        if(!m_sensorArray.isOnLine()) {
-            float bias = m_sensorArray.getBias();
-
-            // Ensure we are going towards the line
+        if(m_bias == CNY70Array::Bias::Center) {
+            m_speedLeft = SPEED_FAST;
+            m_speedRight = SPEED_FAST;
         }
+
+        if(m_bias == CNY70Array::Bias::Left) {
+            m_speedLeft = SPEED_SLOW;
+            m_speedRight = SPEED_FAST;
+        }
+
+        if(m_bias == CNY70Array::Bias::Right) {
+            m_speedLeft = SPEED_FAST;
+            m_speedRight = SPEED_SLOW;
+        }
+
+        m_leftDriver->setSpeed(m_speedLeft);
+        m_rightDriver->setSpeed(m_speedRight);
     }
 };
