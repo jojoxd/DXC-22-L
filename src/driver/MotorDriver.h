@@ -13,6 +13,7 @@ public:
     MotorDriver() = delete;
 
     MotorDriver(PinName pwmPin, PinName directionPin);
+    MotorDriver(PinName pwmPin, PinName directionPin, float speedMultiplier);
 
     ~MotorDriver() = default;
 
@@ -20,6 +21,8 @@ protected:
     PwmOut m_pwmSignal;
 
     DigitalOut m_direction;
+
+    float m_speedMultiplier;
 
 public:
     /**

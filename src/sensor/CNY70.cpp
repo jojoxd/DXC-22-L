@@ -1,7 +1,10 @@
 #include "CNY70.h"
+#include "console.hpp"
 
-CNY70::CNY70(PinName pin)
-    : m_sensor(pin)
+int ticks = 0;
+
+CNY70::CNY70(PinName pin, int id)
+    : m_sensor(pin), m_id(id)
 {
 }
 
@@ -12,6 +15,10 @@ double CNY70::getVoltage()
 
 CNY70::Surface CNY70::getSurface()
 {
+    if(ticks++ % 8 == 0) {
+        Console::getInstance().ISR_writelnf("CNY70", "SenseV:0x%d=%dmV", m_id, (int) (m_sensor.read() * 1000.0f));
+    }
+
     return m_sensor.read() > 0.5f ? Dark : Light;
 }
 

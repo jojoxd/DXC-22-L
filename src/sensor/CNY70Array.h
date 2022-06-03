@@ -4,11 +4,18 @@
 
 #include "CNY70.h"
 
+struct SensorData
+{
+    CNY70::SurfaceData left;
+    CNY70::SurfaceData center;
+    CNY70::SurfaceData right;
+};
+
 class CNY70Array
 {
 public:
     CNY70Array(PinName leftPin, PinName centerPin, PinName rightPin)
-            : m_leftSensor(leftPin), m_centerSensor(centerPin), m_rightSensor(rightPin)
+            : m_leftSensor(leftPin, 1), m_centerSensor(centerPin, 2), m_rightSensor(rightPin, 3)
     {
     }
 

@@ -30,21 +30,52 @@ int main()
     #endif
 
     MotorDriver leftMotor(D11, D12);
-    MotorDriver rightMotor(D9, D10);
+    MotorDriver rightMotor(D9, D10, 0.7f);
     HCSR04 distanceSensor(D7, D8);
+    distanceSensor.setRanges(10.0f, 40.0f);
 
     DrivingController drivingController(&leftMotor, &rightMotor);
     drivingController.start();
     CNY70Array sensorArray(CNY70_LEFT, CNY70_CENTER, CNY70_RIGHT);
 
+    uint32_t ticks = 0;
+
     while(true) {
-        drivingController.setBias(sensorArray.getBias());
+        ticks++;
 
-        float leftSpeedPct = leftMotor.getSpeed() * 100.0f;
-        float rightSpeedPct = rightMotor.getSpeed() * 100.0f;
-        console.writelnf("Left Speed: %d%%, Right Speed: %d%%", (int)leftSpeedPct, (int)rightSpeedPct);
+        CNY70Array::Bias bias = sensorArray.getBias();
+        drivingController.setBias(bias);
 
-        ThisThread::sleep_for(10ms);
+        if(distanceSensor.isNewDataReady()) {
+            float distance = distanceSensor.getDistance();
+
+            if(ticks % 10 == 0) {
+                console.writelnf("T:%d Distance: %dcm", ticks, (int) distance);
+            }
+
+            if(distance < 20.0f) {
+                drivingController.stop();
+            } else {
+                drivingController.start();
+            }
+        }
+
+        if(!distanceSensor.isRunning()) {
+            distanceSensor.startMeasurement();
+        }
+
+        if(ticks % 10 == 0) {
+            float leftSpeedPct = leftMotor.getSpeed() * 100.0f;
+            float rightSpeedPct = rightMotor.getSpeed() * 100.0f;
+
+            console.writelnf(
+                    "T:%d bias:%d, leftSpeed:%d%%, rightSpeed:%d%%",
+                    ticks, bias, (int) leftSpeedPct, (int) rightSpeedPct);
+        }
+
+        console.ISR_handle();
+
+        ThisThread::sleep_for(50ms);
     }
 
     return 0;

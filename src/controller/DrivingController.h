@@ -11,7 +11,8 @@
 #endif
 
 #define SPEED_FAST 1.0f
-#define SPEED_SLOW 0.8f
+// works (semi) #define SPEED_SLOW 0.65f
+#define SPEED_SLOW 0.0f
 
 class DrivingController
 {
@@ -44,6 +45,9 @@ protected:
 public:
     void start()
     {
+        if(m_isRunning)
+            return;
+
         m_ticker.attach(callback(this, &DrivingController::handleDriving), m_interval);
         m_isRunning = true;
     }
@@ -52,6 +56,9 @@ public:
     {
         m_ticker.detach();
         m_isRunning = false;
+
+        m_leftDriver->setSpeed(0);
+        m_rightDriver->setSpeed(0);
     }
 
     bool isRunning() const

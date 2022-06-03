@@ -76,6 +76,11 @@ bool HCSR04::isNewDataReady() const
     return m_newDataReady;
 }
 
+bool HCSR04::isRunning() const
+{
+    return m_timerStarted;
+}
+
 void HCSR04::setRanges(float min, float max)
 {
     if(min < max) {

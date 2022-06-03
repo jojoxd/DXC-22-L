@@ -64,6 +64,8 @@ public:
      */
     bool isNewDataReady() const;
 
+    bool isRunning() const;
+
     /**
      * Get the last elapsed time in microseconds
      */

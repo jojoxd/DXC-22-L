@@ -21,12 +21,14 @@ public:
     };
 
 public:
-    explicit CNY70(PinName pin);
+    explicit CNY70(PinName pin, int id);
 
     ~CNY70() = default;
 
 protected:
     AnalogIn m_sensor;
+
+    int m_id;
 
 public:
     double getVoltage();
