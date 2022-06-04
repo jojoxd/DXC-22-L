@@ -5,6 +5,7 @@
 #include "config.h"
 #include "sensor/CNY70Array.h"
 #include "driver/MotorFunction.h"
+#include "ConsoleInput.hpp"
 
 #ifndef DRCTL_TICKER_INTERVAL
     #define DRCTL_TICKER_INTERVAL 1'000us
@@ -24,10 +25,12 @@
 class DrivingController
 {
 public:
-    DrivingController(MotorDriver* leftDriver, MotorDriver* rightDriver)
+    DrivingController(MotorDriver* leftDriver, MotorDriver* rightDriver, ConsoleInput* input)
         : m_leftDriver(leftDriver), m_rightDriver(rightDriver),
           m_ticker(), m_ticks(0), m_interval(DRCTL_TICKER_INTERVAL)
     {
+        input->attachPauseCallback(callback(this, &DrivingController::onPause));
+        input->attachResumeCallback(callback(this, &DrivingController::onResume));
     }
 
     ~DrivingController()
@@ -105,5 +108,15 @@ protected:
 
         m_leftDriver->setSpeed(m_speedLeft);
         m_rightDriver->setSpeed(m_speedRight);
+    }
+
+    void onPause()
+    {
+        stop();
+    }
+
+    void onResume()
+    {
+        start();
     }
 };

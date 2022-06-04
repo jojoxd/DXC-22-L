@@ -51,6 +51,23 @@
     #define DRCTL_SPEED_FAST 1.0f
     #define DRCTL_SPEED_SLOW 0.0f
 
+    // Left Motor Config
+    #define DRCTL_LEFTMOTOR_PWM PinName::D11
+    #define DRCTL_LEFTMOTOR_DIR PinName::D12
+    #define DRCTL_LEFTMOTOR_MUL 1.0f
+
+    // Right Motor Config
+    #define DRCTL_RIGHTMOTOR_PWM PinName::D9
+    #define DRCTL_RIGHTMOTOR_DIR PinName::D10
+    #define DRCTL_RIGHTMOTOR_MUL 0.7f
+
+    #define HCSR04_ECHO PinName::D7
+    #define HCSR04_TRIG PinName::D8
+
+    // End Stop length in cm (float)
+    #define HCSR04_STOP_LENGTH 20.0f
+
+    // Require Computer Serial p<enter> signal to start
     #define STARTUP_PAUSED true
 #else
     // These depend on generalized PCB

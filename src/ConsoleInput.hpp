@@ -5,16 +5,14 @@
 #include "helper/config.h"
 #include "console.hpp"
 
-#ifndef STARTUP_PAUSED
-    #define STARTUP_PAUSED false
-#endif
-
 /**
  * Handles Console Commands
  *
  * Currently supported:
  * - r<enter> - reset after 10 seconds (pause handlers are called before countdown)
  * - p<enter> - pauses/unpauses running state
+ *
+ * Note: Seld EOL = LF, and we want to send the whole message in 1 go instead of per letter
  */
 class ConsoleInput
 {
@@ -25,7 +23,7 @@ public:
     }
 
 protected:
-    bool m_paused = STARTUP_PAUSED;
+    bool m_paused = false;
     bool m_resetting = false;
     bool m_firstRun = true;
 
@@ -57,21 +55,6 @@ public:
     {
         char str[8] = {0};
 
-        if(m_firstRun) {
-            m_firstRun = false;
-
-            if(m_paused) {
-                runPauseCallbacks();
-
-                while(m_paused) {
-                    m_console.writelnf("pause=1");
-                    ThisThread::sleep_for(1000ms);
-
-                    handleInput();
-                }
-            }
-        }
-
         if(m_resetting)
             return;
 
@@ -87,28 +70,33 @@ public:
 
                 system_reset();
             }
+
+            if(strcmp(str, "p\n") == 0) {
+                togglePause();
+            }
         }
+    }
 
-        if(strcmp(str, "p\n") == 0) {
-            if(m_paused) {
-                m_paused = false;
+    void togglePause()
+    {
+        if(m_paused) {
+            m_paused = false;
 
-                runResumeCallbacks();
+            runResumeCallbacks();
 
-                m_console.writelnf("pause=0");
-            } else {
-                m_paused = true;
+            m_console.writelnf("pause=0");
+        } else {
+            m_paused = true;
 
-                runPauseCallbacks();
+            runPauseCallbacks();
 
+            m_console.writelnf("pause=1");
+
+            while(m_paused) {
                 m_console.writelnf("pause=1");
+                ThisThread::sleep_for(1000ms);
 
-                while(m_paused) {
-                    m_console.writelnf("pause=1");
-                    ThisThread::sleep_for(1000ms);
-
-                    handleInput();
-                }
+                handleInput();
             }
         }
     }

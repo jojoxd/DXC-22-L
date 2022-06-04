@@ -56,7 +56,7 @@ async function main()
 
     process.on("SIGINT", async () => {
         await tsv.close();
-        input?.sendSignal("p\n"); // pause
+        await input?.sendSignal("p\n"); // pause
 
         setTimeout(() => {
             input?.close();
