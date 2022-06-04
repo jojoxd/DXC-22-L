@@ -9,7 +9,7 @@
 #include "sensor/HCSR04.h"
 #include "sensor/CNY70Array.h"
 #include "controller/DrivingController.h"
-
+#include "controller/PaperThrower.hpp"
 
 /**
  * Main Application Context
@@ -20,6 +20,7 @@ public:
     MainContext()
             : leftMotor(DRCTL_LEFTMOTOR_PWM, DRCTL_LEFTMOTOR_DIR, DRCTL_LEFTMOTOR_MUL),
               rightMotor(DRCTL_RIGHTMOTOR_PWM, DRCTL_RIGHTMOTOR_DIR, DRCTL_RIGHTMOTOR_MUL),
+              paperThrower(),
               console(Console::getInstance()),
               input(console),
               distanceSensor(HCSR04_ECHO, HCSR04_TRIG),
@@ -27,11 +28,15 @@ public:
               sensorArray(CNY70_LEFT, CNY70_CENTER, CNY70_RIGHT)
     {
         distanceSensor.setRanges(10.0f, 40.0f);
+
+        input.setThrowCallback(callback(this, &MainContext::throwPaper));
     }
 
 public:
     MotorDriver leftMotor;
     MotorDriver rightMotor;
+
+    PaperThrower paperThrower;
 
     Console& console;
 
@@ -97,5 +102,10 @@ protected:
             console.writeln("hc-sr04/start");
             distanceSensor.startMeasurement();
         }
+    }
+
+    void throwPaper()
+    {
+        paperThrower.execute();
     }
 };

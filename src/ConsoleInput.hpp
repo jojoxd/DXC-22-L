@@ -31,6 +31,7 @@ protected:
 
     Callback<void()> m_pauseCallbacks[4] = {nullptr};
     Callback<void()> m_resumeCallbacks[4] = {nullptr};
+    Callback<void()> m_throwCallback = nullptr;
 
 public:
     void attachPauseCallback(Callback<void()> cb)
@@ -49,6 +50,11 @@ public:
                 onResumeCallback = cb;
             }
         }
+    }
+
+    void setThrowCallback(Callback<void()> cb)
+    {
+        m_throwCallback = cb;
     }
 
     void handleInput()
@@ -73,6 +79,10 @@ public:
 
             if(strcmp(str, "p\n") == 0) {
                 togglePause();
+            }
+
+            if(strcmp(str, "t\n") == 0) {
+                execThrow();
             }
         }
     }
@@ -117,6 +127,13 @@ protected:
             if(onResumeCallback != nullptr) {
                 onResumeCallback();
             }
+        }
+    }
+
+    void execThrow()
+    {
+        if(m_throwCallback != nullptr) {
+            m_throwCallback();
         }
     }
 };

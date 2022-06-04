@@ -2,6 +2,7 @@
 
 #include <mbed.h>
 
+#include "helper/config.h"
 #include "util.hpp"
 
 /**
@@ -26,6 +27,7 @@ protected:
 
     float m_speed = 0.0f;
     float m_speedMultiplier;
+
     util::MovingAverage<float, 10, float> m_movingAverageSpeed;
     Ticker m_ticker;
 

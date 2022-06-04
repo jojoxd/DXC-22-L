@@ -12,7 +12,7 @@ float CNY70::getVoltage()
 
 CNY70::Surface CNY70::getSurface()
 {
-    return m_sensor.read() > 0.5f ? Dark : Light;
+    return m_sensor.read() > CNY70_CUTOFF ? Dark : Light;
 }
 
 CNY70::operator float()

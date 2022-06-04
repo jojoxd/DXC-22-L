@@ -2,6 +2,10 @@
 
 #include <mbed.h>
 
+#ifndef CNY70_CUTOFF
+    #define CNY70_CUTOFF 0.5f
+#endif
+
 /**
  * Vishay CNY70 Optical Reflective Sensor
  */

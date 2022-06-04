@@ -24,8 +24,6 @@ void MotorDriver::setSpeed(float speed)
     }
 
     m_speed = speed;
-
-    //m_pwmSignal = fabs(speed) * m_speedMultiplier;
 }
 
 float MotorDriver::getSpeed(bool corrected)
@@ -40,12 +38,16 @@ float MotorDriver::getSpeed(bool corrected)
 
 void MotorDriver::tick()
 {
-    float speed = m_movingAverageSpeed.next(m_speed);
+    #if defined(DRIVER_METHOD_INSTANT)
+        float speed = m_speed;
+    #elif defined(DRIVER_METHOD_AVERAGE)
+        float speed = m_movingAverageSpeed.next(m_speed);
 
-    // Quick off, but keep moving average moving
-    if(m_speed == 0.0f) {
-        speed = 0.0f;
-    }
+        // Quick off, but keep moving average moving
+        if(m_speed == 0.0f) {
+            speed = 0.0f;
+        }
+    #endif
 
     m_pwmSignal = fabs(speed) * m_speedMultiplier;
 }

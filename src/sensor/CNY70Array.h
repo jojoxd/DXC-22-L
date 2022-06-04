@@ -6,6 +6,10 @@
 #include "console.hpp"
 
 
+#ifndef CNY70_RELATIVE_DELTA
+    #define CNY70_RELATIVE_DELTA 0.3f
+#endif
+
 /**
  * Sensor Array
  *
@@ -14,20 +18,20 @@
 class CNY70Array
 {
 public:
-    CNY70Array(PinName leftPin, PinName centerPin, PinName rightPin)
-            : m_leftSensor(leftPin), m_centerSensor(centerPin), m_rightSensor(rightPin)
-    {
-    }
-
-    ~CNY70Array() = default;
-
-public:
     enum Bias
     {
         Left = 0,
         Center = 1,
         Right = 2,
     };
+
+public:
+    CNY70Array(PinName leftPin, PinName centerPin, PinName rightPin)
+            : m_leftSensor(leftPin), m_centerSensor(centerPin), m_rightSensor(rightPin)
+    {
+    }
+
+    ~CNY70Array() = default;
 
 protected:
     CNY70 m_leftSensor;
@@ -46,19 +50,20 @@ public:
             (int)(m_rightSensor.getVoltage() * 1000.0f)
         );
 
-//        float leftV = m_leftSensor.getVoltage();
-//        float rightV = m_rightSensor.getVoltage();
-//
-//        if((leftV - 0.3f <= rightV) && (leftV + 0.3f) >= rightV) {
-//            return Center;
-//        }
-//
-//        if(leftV > rightV) {
-//            return Right;
-//        } else {
-//            return Left;
-//        }
+    #if defined(CNY70_TYPE_RELATIVE)
+        float leftV = m_leftSensor.getVoltage();
+        float rightV = m_rightSensor.getVoltage();
 
+        if((leftV - CNY70_RELATIVE_DELTA) <= rightV && (leftV + CNY70_RELATIVE_DELTA) >= rightV) {
+            return Center;
+        }
+
+        if(leftV > rightV) {
+            return Right;
+        }
+
+        return Left;
+    #elif defined(CNY70_TYPE_ABSOLUTE)
         if(m_leftSensor.getSurface() == CNY70::Surface::Light)
             return Left;
 
@@ -66,6 +71,7 @@ public:
             return Right;
 
         return Center;
+    #endif
     }
 
     bool isOnLine()

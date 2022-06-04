@@ -1,15 +1,7 @@
 absolute sensor neigt naar links door code, ipv rechtdoor
 
+Opties:
+- CNY70_TYPE absoluut of relatief
+- DRIVER_METHOD instant of average
 
-
-absoluut:
-```
-// Sensor Readout:
-sensor.read() > 0.5f ? Dark : Light;
-```
-
-relatief:
-```
-// Sensor Readout:
-sensor1.read() - 0.3f > sensor2.read() && sensor1.read() + 0.3f < sensor2.read()  
-```
+Deze waarden kunnen aangepast worden in `config.h`
