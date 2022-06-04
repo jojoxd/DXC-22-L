@@ -26,7 +26,7 @@ protected:
 
     float m_speed = 0.0f;
     float m_speedMultiplier;
-    util::MovingAverage<float, 20, float> m_movingAverageSpeed;
+    util::MovingAverage<float, 10, float> m_movingAverageSpeed;
     Ticker m_ticker;
 
 public:

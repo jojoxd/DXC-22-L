@@ -25,7 +25,7 @@ void MotorDriver::setSpeed(float speed)
 
     m_speed = speed;
 
-    // m_pwmSignal = fabs(speed) * m_speedMultiplier;
+    //m_pwmSignal = fabs(speed) * m_speedMultiplier;
 }
 
 float MotorDriver::getSpeed(bool corrected)

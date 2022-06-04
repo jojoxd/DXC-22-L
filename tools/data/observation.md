@@ -1,0 +1,1 @@
+absolute sensor neigt naar links door code, ipv rechtdoor

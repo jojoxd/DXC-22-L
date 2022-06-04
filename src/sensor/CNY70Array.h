@@ -46,18 +46,18 @@ public:
             (int)(m_rightSensor.getVoltage() * 1000.0f)
         );
 
-        float leftV = m_leftSensor.getVoltage();
-        float rightV = m_rightSensor.getVoltage();
-
-        if(leftV - 0.1f <= rightV && leftV + 0.1f >= rightV) {
-            return Center;
-        }
-
-        if(leftV > rightV) {
-            return Right;
-        } else {
-            return Left;
-        }
+//        float leftV = m_leftSensor.getVoltage();
+//        float rightV = m_rightSensor.getVoltage();
+//
+//        if((leftV - 0.3f <= rightV) && (leftV + 0.3f) >= rightV) {
+//            return Center;
+//        }
+//
+//        if(leftV > rightV) {
+//            return Right;
+//        } else {
+//            return Left;
+//        }
 
         if(m_leftSensor.getSurface() == CNY70::Surface::Light)
             return Left;
