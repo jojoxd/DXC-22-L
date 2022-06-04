@@ -21,7 +21,7 @@ public:
         : m_serial(CONSOLE_TX, CONSOLE_RX, CONSOLE_BAUDRATE),
           m_queue(CONSOLE_ISR_QUEUE_SZ * CONSOLE_ISR_EVENT_SZ)
     {
-        m_serial.set_blocking(true);
+        m_serial.set_blocking(false);
     }
 
     ~Console() = default;
@@ -56,6 +56,9 @@ public:
         );
 
         m_serial.write(formatted.c_str(), formatted.length());
+
+        // We need to sync, or lines will be cut off
+        m_serial.sync();
     }
 
     /**
@@ -119,5 +122,10 @@ public:
         for(int i = 0; i < CONSOLE_ISR_QUEUE_SZ; i++) {
             m_queue.dispatch_once();
         }
+    }
+
+    ssize_t read(void* ptr, size_t sz)
+    {
+        return m_serial.read(ptr, sz);
     }
 };

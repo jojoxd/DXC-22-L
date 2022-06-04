@@ -2,6 +2,8 @@
 
 #include <mbed.h>
 
+#include "util.hpp"
+
 /**
  * @TODO: Kick-on / Kick-off sequence (Smooth fade-in/out)
  * @TODO: Reversal Sequence (tied in to Kick-on/Kick-off)
@@ -31,5 +33,5 @@ public:
      * Domain is [-1.0f .. 1.0f]
      */
     void setSpeed(float speed);
-    float getSpeed();
+    float getSpeed(bool corrected = false);
 };

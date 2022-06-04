@@ -6,6 +6,7 @@
 #include "helper/macros.h"
 #include "console.hpp"
 #include "sensor/CNY70Array.h"
+#include "ConsoleInput.hpp"
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
@@ -13,6 +14,9 @@
 int main()
 {
     Console& console = Console::getInstance();
+    ConsoleInput input(console);
+
+    console.writeln(CONSOLE_TITLE);
 
     #ifdef DXC_TEAM_1
         // Team 1 Custom Code
@@ -40,8 +44,22 @@ int main()
 
     uint32_t ticks = 0;
 
+    input.attachPauseCallback([&]() {
+        drivingController.stop();
+        leftMotor.setSpeed(0.0f);
+        rightMotor.setSpeed(0.0f);
+    });
+
+    input.attachResumeCallback([&]() {
+        drivingController.start();
+    });
+
     while(true) {
         ticks++;
+
+        input.handleInput();
+
+        console.writelnf("tick=%d", ticks);
 
         CNY70Array::Bias bias = sensorArray.getBias();
         drivingController.setBias(bias);
@@ -49,8 +67,8 @@ int main()
         if(distanceSensor.isNewDataReady()) {
             float distance = distanceSensor.getDistance();
 
-            if(ticks % 10 == 0) {
-                console.writelnf("T:%d Distance: %dcm", ticks, (int) distance);
+            if(ticks % 1 == 0) {
+                console.writelnf("hc-sr04/distance=%dcm", (int) distance);
             }
 
             if(distance < 20.0f) {
@@ -61,21 +79,22 @@ int main()
         }
 
         if(!distanceSensor.isRunning()) {
+            console.writeln("hc-sr04/start");
             distanceSensor.startMeasurement();
         }
 
-        if(ticks % 10 == 0) {
-            float leftSpeedPct = leftMotor.getSpeed() * 100.0f;
-            float rightSpeedPct = rightMotor.getSpeed() * 100.0f;
+        if(ticks % 1 == 0) {
+            float leftSpeedPct = leftMotor.getSpeed(false) * 100.0f;
+            float rightSpeedPct = rightMotor.getSpeed(false) * 100.0f;
 
             console.writelnf(
-                    "T:%d bias:%d, leftSpeed:%d%%, rightSpeed:%d%%",
-                    ticks, bias, (int) leftSpeedPct, (int) rightSpeedPct);
+                "cny70/bias=%d, drctl/leftSpeed=%d%%, drctl/rightSpeed=%d%%",
+                bias, (int) leftSpeedPct, (int) rightSpeedPct);
         }
 
         console.ISR_handle();
 
-        ThisThread::sleep_for(50ms);
+        ThisThread::sleep_for(DRCTL_TICKER_INTERVAL / 2);
     }
 
     return 0;

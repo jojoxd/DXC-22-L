@@ -10,10 +10,17 @@
     #define DRCTL_TICKER_INTERVAL 1'000us
 #endif
 
-#define SPEED_FAST 1.0f
-// works (semi) #define SPEED_SLOW 0.65f
-#define SPEED_SLOW 0.0f
+#ifndef DRCTL_SPEED_SLOW
+    #define DRCTL_SPEED_SLOW 0.0f
+#endif
 
+#ifndef DRCTL_SPEED_FAST
+    #define DRCTL_SPEED_FAST 1.0f
+#endif
+
+/**
+ * Uses sensor data to change motor speeds
+ */
 class DrivingController
 {
 public:
@@ -82,18 +89,18 @@ protected:
         m_ticks++;
 
         if(m_bias == CNY70Array::Bias::Center) {
-            m_speedLeft = SPEED_FAST;
-            m_speedRight = SPEED_FAST;
+            m_speedLeft = DRCTL_SPEED_FAST;
+            m_speedRight = DRCTL_SPEED_FAST;
         }
 
         if(m_bias == CNY70Array::Bias::Left) {
-            m_speedLeft = SPEED_SLOW;
-            m_speedRight = SPEED_FAST;
+            m_speedLeft = DRCTL_SPEED_SLOW;
+            m_speedRight = DRCTL_SPEED_FAST;
         }
 
         if(m_bias == CNY70Array::Bias::Right) {
-            m_speedLeft = SPEED_FAST;
-            m_speedRight = SPEED_SLOW;
+            m_speedLeft = DRCTL_SPEED_FAST;
+            m_speedRight = DRCTL_SPEED_SLOW;
         }
 
         m_leftDriver->setSpeed(m_speedLeft);

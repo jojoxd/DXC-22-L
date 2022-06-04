@@ -23,10 +23,12 @@ void MotorDriver::setSpeed(float speed)
      m_pwmSignal = fabs(speed) * m_speedMultiplier;
 }
 
-float MotorDriver::getSpeed()
+float MotorDriver::getSpeed(bool corrected)
 {
-    if(m_direction.read() == 0)
-        return 0.0f - (m_pwmSignal.read() / m_speedMultiplier);
+    float speedMultiplier = corrected ? m_speedMultiplier : 1.0f;
 
-    return (m_pwmSignal.read() / m_speedMultiplier);
+    if(m_direction.read() == 0)
+        return 0.0f - (m_pwmSignal.read() / speedMultiplier);
+
+    return (m_pwmSignal.read() / speedMultiplier);
 }

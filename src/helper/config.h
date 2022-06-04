@@ -38,11 +38,20 @@
 #define DRCTL_TICKER_INTERVAL 100ms
 
 #if DXC_TEAM == 3
+    /**
+     * DXC_TEAM 3 is the small test robot
+     */
+
     #define CNY70_ANALOG
 
     #define CNY70_LEFT PinName::A0
     #define CNY70_CENTER PinName::A1
     #define CNY70_RIGHT PinName::A2
+
+    #define DRCTL_SPEED_FAST 1.0f
+    #define DRCTL_SPEED_SLOW 0.0f
+
+    #define STARTUP_PAUSED true
 #else
     // These depend on generalized PCB
     #define CNY70_LEFT PinName::A0
