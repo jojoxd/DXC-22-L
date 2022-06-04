@@ -1,9 +1,12 @@
 #include "MotorDriver.h"
 
 MotorDriver::MotorDriver(PinName pwmPin, PinName directionPin, float speedMultiplier = 1.0f)
-    : m_pwmSignal(pwmPin), m_direction(directionPin), m_speedMultiplier(speedMultiplier)
+    : m_pwmSignal(pwmPin), m_direction(directionPin),
+    m_speedMultiplier(speedMultiplier), m_movingAverageSpeed(), m_ticker()
 {
     m_pwmSignal.period_us(10);
+
+    m_ticker.attach(callback(this, &MotorDriver::tick), 10ms);
 }
 
 MotorDriver::MotorDriver(PinName pwmPin, PinName directionPin)
@@ -20,7 +23,9 @@ void MotorDriver::setSpeed(float speed)
         m_direction = 1;
     }
 
-     m_pwmSignal = fabs(speed) * m_speedMultiplier;
+    m_speed = speed;
+
+    // m_pwmSignal = fabs(speed) * m_speedMultiplier;
 }
 
 float MotorDriver::getSpeed(bool corrected)
@@ -31,4 +36,16 @@ float MotorDriver::getSpeed(bool corrected)
         return 0.0f - (m_pwmSignal.read() / speedMultiplier);
 
     return (m_pwmSignal.read() / speedMultiplier);
+}
+
+void MotorDriver::tick()
+{
+    float speed = m_movingAverageSpeed.next(m_speed);
+
+    // Quick off, but keep moving average moving
+    if(m_speed == 0.0f) {
+        speed = 0.0f;
+    }
+
+    m_pwmSignal = fabs(speed) * m_speedMultiplier;
 }

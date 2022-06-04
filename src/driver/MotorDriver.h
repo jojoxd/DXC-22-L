@@ -24,7 +24,10 @@ protected:
 
     DigitalOut m_direction;
 
+    float m_speed = 0.0f;
     float m_speedMultiplier;
+    util::MovingAverage<float, 20, float> m_movingAverageSpeed;
+    Ticker m_ticker;
 
 public:
     /**
@@ -34,4 +37,7 @@ public:
      */
     void setSpeed(float speed);
     float getSpeed(bool corrected = false);
+
+protected:
+    void tick();
 };

@@ -30,7 +30,12 @@ namespace util
             m_pos = (m_pos + 1) % t_size;
 
             //return the average
-            return (V) (m_sum / t_size);
+            return (V) (m_sum / (V)t_size);
+        }
+
+        V get()
+        {
+            return (V) (m_sum / (V)t_size);
         }
 
     protected:
