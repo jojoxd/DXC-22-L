@@ -6,10 +6,20 @@
 #include "util.hpp"
 
 /**
- * @TODO: Kick-on / Kick-off sequence (Smooth fade-in/out)
- * @TODO: Reversal Sequence (tied in to Kick-on/Kick-off)
+ * A Motor Driver implementation
+ * Controls the speed and direction of a motor using an L293D/L293N H-bridge
+ *
+ * Supports 2 modes:
+ * - DRIVER_METHOD = 0: Instant Mode:
+ *     Pushes the asked speed instantly to the motor
+ *     This may cause a sudden spike in current
+ *
+ * - DRIVER_METHOD = 1: Average Mode:
+ *     Uses a moving average to ramp up/down the motor
+ *     When setting the speed to 0.0f, it will immediately set that speed.
+ *
+ * The mode can be set in helper/config.h
  */
-
 class MotorDriver
 {
 public:

@@ -2,8 +2,8 @@
 
 #include <mbed.h>
 
-#include "CNY70.h"
-#include "console.hpp"
+#include "sensor/CNY70.h"
+#include "console/Console.hpp"
 
 
 #ifndef CNY70_RELATIVE_DELTA
@@ -14,6 +14,19 @@
  * Sensor Array
  *
  * Contains logic to define which way we want to drive
+ *
+ * The sensor array supports 2 modes:
+ * - CNY70_TYPE = 0: Absolute mode:
+ *     Uses an absolute cutoff (CNY70_CUTOFF) to define a direction
+ *     > This mode will always try to pull left
+ *     > This mode uses the CNY70::Surface returned straight from the CNY70 class
+ *
+ * - CNY70_TYPE = 1: Relative mode:
+ *     Uses a delta to check if we need to go straight
+ *     Otherwise, we check both left and right sensors to define our direction.
+ *     This mode is a little slower, but _should_ work better with sudden light level changes
+ *     when both sensors detect it at the same time.
+ *     > This mode uses the voltage from the CNY70 class
  */
 class CNY70Array
 {
@@ -26,11 +39,7 @@ public:
     };
 
 public:
-    CNY70Array(PinName leftPin, PinName centerPin, PinName rightPin)
-            : m_leftSensor(leftPin), m_centerSensor(centerPin), m_rightSensor(rightPin)
-    {
-    }
-
+    CNY70Array(PinName leftPin, PinName centerPin, PinName rightPin);
     ~CNY70Array() = default;
 
 protected:
@@ -39,43 +48,5 @@ protected:
     CNY70 m_rightSensor;
 
 public:
-    Bias getBias()
-    {
-        Console& console = Console::getInstance();
-
-        console.writelnf(
-            "cny70/left=%dmV, cny70/center=%dmV, cny70/right=%dmV",
-            (int)(m_leftSensor.getVoltage() * 1000.0f),
-            (int)(m_centerSensor.getVoltage() * 1000.0f),
-            (int)(m_rightSensor.getVoltage() * 1000.0f)
-        );
-
-    #if defined(CNY70_TYPE_RELATIVE)
-        float leftV = m_leftSensor.getVoltage();
-        float rightV = m_rightSensor.getVoltage();
-
-        if((leftV - CNY70_RELATIVE_DELTA) <= rightV && (leftV + CNY70_RELATIVE_DELTA) >= rightV) {
-            return Center;
-        }
-
-        if(leftV > rightV) {
-            return Right;
-        }
-
-        return Left;
-    #elif defined(CNY70_TYPE_ABSOLUTE)
-        if(m_leftSensor.getSurface() == CNY70::Surface::Light)
-            return Left;
-
-        if(m_rightSensor.getSurface() == CNY70::Surface::Light)
-            return Right;
-
-        return Center;
-    #endif
-    }
-
-    bool isOnLine()
-    {
-        return false;
-    }
+    CNY70Array::Bias getBias();
 };

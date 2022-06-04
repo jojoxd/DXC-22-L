@@ -14,12 +14,13 @@
     #define CONSOLE_ISR_EVENT_SZ (sizeof(mbed::Callback<void(const char*, const char*)>) + 4 * sizeof(float))
 #endif
 
+/**
+ * Console is the main way to talk to a computer using USB
+ */
 class Console
 {
 public:
     Console()
-        : m_serial(CONSOLE_TX, CONSOLE_RX, CONSOLE_BAUDRATE),
-          m_queue(CONSOLE_ISR_QUEUE_SZ * CONSOLE_ISR_EVENT_SZ)
     {
         m_serial.set_blocking(false);
     }
@@ -34,9 +35,9 @@ public:
     }
 
 protected:
-    BufferedSerial m_serial;
+    BufferedSerial m_serial = { CONSOLE_TX, CONSOLE_RX, CONSOLE_BAUDRATE };
 
-    EventQueue m_queue;
+    EventQueue m_isrQueue = { CONSOLE_ISR_QUEUE_SZ * CONSOLE_ISR_EVENT_SZ };
 
 public:
     /**
@@ -104,7 +105,7 @@ public:
     template<typename ...Args>
     inline void ISR_writelnf(const char* ctx, const char* str, Args... args)
     {
-        m_queue.call(callback([](const char* in_ctx, const char* in_str, Args... args) {
+        m_isrQueue.call(callback([](const char* in_ctx, const char* in_str, Args... args) {
             Console& console = Console::getInstance();
 
             const std::string out_ctx = util::string_fmt("ISR:%s", in_ctx);
@@ -120,7 +121,7 @@ public:
     inline void ISR_handle()
     {
         for(int i = 0; i < CONSOLE_ISR_QUEUE_SZ; i++) {
-            m_queue.dispatch_once();
+            m_isrQueue.dispatch_once();
         }
     }
 

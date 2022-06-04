@@ -1,6 +1,6 @@
 #include <mbed.h>
 
-#include "console.hpp"
+#include "console/Console.hpp"
 #include "sensor/HCSR04.h"
 
 #define ECHO_PIN A0

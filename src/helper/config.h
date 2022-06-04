@@ -1,6 +1,6 @@
 #pragma once
 
-#include "macros.h"
+#include "helper/macros.h"
 
 /**
  * SECTION: Build System
@@ -42,6 +42,11 @@
 // 0=instant or 1=average
 #define DRIVER_METHOD 1
 
+// Enable data logging
+#define DATA_LOGGING
+
+// Require Computer Serial p<enter> signal to start
+#define STARTUP_PAUSED
 
 /**
  * SECTION: Driving Controller
@@ -133,9 +138,6 @@
 
     #define HCSR04_ECHO PinName::D7
     #define HCSR04_TRIG PinName::D8
-
-    // Require Computer Serial p<enter> signal to start
-    #define STARTUP_PAUSED true
 #endif
 
 

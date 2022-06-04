@@ -2,10 +2,10 @@
 
 #include <mbed.h>
 
-#include "config.h"
+#include "helper/config.h"
 #include "sensor/CNY70Array.h"
-#include "driver/MotorFunction.h"
-#include "ConsoleInput.hpp"
+#include "console/ConsoleInput.h"
+#include "driver/MotorDriver.h"
 
 #ifndef DRCTL_TICKER_INTERVAL
     #define DRCTL_TICKER_INTERVAL 1'000us
@@ -20,66 +20,40 @@
 #endif
 
 /**
- * Uses sensor data to change motor speeds
+ * DrivingController controls the way we drive
+ *
+ * It converts sensor data (CNY70Array::Bias) into actual movement
  */
 class DrivingController
 {
 public:
-    DrivingController(MotorDriver* leftDriver, MotorDriver* rightDriver, ConsoleInput* input)
-        : m_leftDriver(leftDriver), m_rightDriver(rightDriver),
-          m_ticker(), m_ticks(0), m_interval(DRCTL_TICKER_INTERVAL)
-    {
-        input->attachPauseCallback(callback(this, &DrivingController::onPause));
-        input->attachResumeCallback(callback(this, &DrivingController::onResume));
-    }
+    DrivingController(MotorDriver* leftDriver, MotorDriver* rightDriver, ConsoleInput* input);
 
-    ~DrivingController()
-    {
-        m_ticker.detach();
-    }
+    ~DrivingController();
+
+public:
+    void start();
+
+    void stop();
+
+    bool isRunning() const;
+
+    void setBias(CNY70Array::Bias bias);
 
 protected:
     MotorDriver* m_leftDriver;
     MotorDriver* m_rightDriver;
 
     Ticker m_ticker;
-    int m_ticks;
+    int m_ticks = 0;
 
-    std::chrono::microseconds m_interval;
+    std::chrono::microseconds m_interval = { DRCTL_TICKER_INTERVAL };
 
     bool m_isRunning = false;
 
     CNY70Array::Bias m_bias = CNY70Array::Bias::Center;
     float m_speedLeft = 1.0f;
     float m_speedRight = 1.0f;
-public:
-    void start()
-    {
-        if(m_isRunning)
-            return;
-
-        m_ticker.attach(callback(this, &DrivingController::handleDriving), m_interval);
-        m_isRunning = true;
-    }
-
-    void stop()
-    {
-        m_ticker.detach();
-        m_isRunning = false;
-
-        m_leftDriver->setSpeed(0);
-        m_rightDriver->setSpeed(0);
-    }
-
-    bool isRunning() const
-    {
-        return m_isRunning;
-    }
-
-    void setBias(CNY70Array::Bias bias)
-    {
-        m_bias = bias;
-    }
 
 protected:
     /**
@@ -87,36 +61,9 @@ protected:
      *
      * @NOTE: This function is in ISR context.
      */
-    void handleDriving()
-    {
-        m_ticks++;
+    void handleDriving();
 
-        if(m_bias == CNY70Array::Bias::Center) {
-            m_speedLeft = DRCTL_SPEED_FAST;
-            m_speedRight = DRCTL_SPEED_FAST;
-        }
+    void onPause();
 
-        if(m_bias == CNY70Array::Bias::Left) {
-            m_speedLeft = DRCTL_SPEED_SLOW;
-            m_speedRight = DRCTL_SPEED_FAST;
-        }
-
-        if(m_bias == CNY70Array::Bias::Right) {
-            m_speedLeft = DRCTL_SPEED_FAST;
-            m_speedRight = DRCTL_SPEED_SLOW;
-        }
-
-        m_leftDriver->setSpeed(m_speedLeft);
-        m_rightDriver->setSpeed(m_speedRight);
-    }
-
-    void onPause()
-    {
-        stop();
-    }
-
-    void onResume()
-    {
-        start();
-    }
+    void onResume();
 };

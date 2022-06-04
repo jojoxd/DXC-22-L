@@ -32,6 +32,7 @@
  *
  * @NOTE: If the measured object is more then 15 degrees rotated,
  *        the sensor will NOT give an accurate reading.
+ *        When the angle is 45 degrees or more, it may not receive an echo at all.
  */
 class HCSR04
 {

@@ -3,9 +3,10 @@
 #include <util.hpp>
 
 HCSR04::HCSR04(PinName echoPin, PinName triggerPin)
-    : m_trigger(triggerPin), m_echo(echoPin), m_elapsedTime(0ms)
+    : m_trigger(triggerPin), m_echo(echoPin)
 {
     m_distance = -1;
+    m_elapsedTime = 0ms;
 
     m_minDistance = HCSR04_MIN_RANGE;
     m_maxDistance = HCSR04_MAX_RANGE;

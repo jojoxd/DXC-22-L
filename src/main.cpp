@@ -1,18 +1,14 @@
 #include <mbed.h>
 
-#include "helper/macros.h"
-#include "console.hpp"
-#include "MainContext.hpp"
-
-#ifndef STARTUP_PAUSED
-    #define STARTUP_PAUSED false
-#endif
+#include "helper/config.h"
+#include "console/Console.hpp"
+#include "context/Context.h"
 
 [[noreturn]] int main()
 {
     Console& console = Console::getInstance();
 
-    MainContext context;
+    Context context;
 
     console.writeln(CONSOLE_TITLE);
 
@@ -31,11 +27,7 @@
         console.writeln("Small Test Robot");
     #endif
 
-    #if STARTUP_PAUSED
-        context.input.togglePause();
-    #endif
-
-    context.drivingController.start();
+    context.startup();
 
     while(true) {
         context.tick();

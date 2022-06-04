@@ -1,8 +1,7 @@
 #include <mbed.h>
 
-#include "console.hpp"
+#include "console/Console.hpp"
 #include "driver/MotorDriver.h"
-#include "driver/MotorFunction.h"
 
 #define PWM_PIN A0
 #define DIRECTION_PIN A1
@@ -28,10 +27,12 @@
 [[noreturn]] void ex_MotorDriver_DirectionChange()
 {
     MotorDriver driver(PWM_PIN, DIRECTION_PIN);
-
     Console& console = Console::getInstance();
 
-    MotorFunction func(&driver, 1'000us, callback([&](MotorDriver* drv, int currentRep) {
+    int currentRep = 0;
+    while(true) {
+        currentRep++;
+
         float x = (float)currentRep / 1000.0f;
 
         float a = 2.0f; // Amplitude
@@ -39,16 +40,11 @@
 
         float speed = max(-1.0f, min(1.0f, 2.0f * a / PI_F * asin(sin(2.0f * PI_F / p * x))));
 
-        drv->setSpeed(speed);
+        driver.setSpeed(speed);
 
         if(currentRep % 40 == 0)
-            console.ISR_writelnf("func", "Speed@%d = %d%%", currentRep, (int)(drv->getSpeed() * 100.0f));
-    }));
+            console.writelnf("func", "Speed@%d = %d%%", currentRep, (int)(driver.getSpeed() * 100.0f));
 
-    func.start();
-
-    while(true) {
-        console.ISR_handle();
         ThisThread::sleep_for(250ms);
     }
 }
