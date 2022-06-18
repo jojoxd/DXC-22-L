@@ -23,6 +23,16 @@
  * DrivingController controls the way we drive
  *
  * It converts sensor data (CNY70Array::Bias) into actual movement
+ *
+ * Macros:
+ * - DRCTL_TICKER_INTERVAL (default: 1000us):
+ *     Interval at which to update the motor speeds
+ *
+ * - DRCTL_SPEED_SLOW (default: 0.0f):
+ *     "slow" motor speed when it should move in a certain direction
+ *
+ * - DRCTL_SPEED_FAST (default: 1.0f):
+ *     "fast" motor speed when it should move in a certain direction, or forward
  */
 class DrivingController
 {

@@ -2658,7 +2658,8 @@ ADD_EXECUTABLE(DXC-22-L
   src/context/Context.h
   src/main.cpp
   src/util.hpp
-  )
+  src/sensor/DRV5053.cpp
+  src/sensor/DRV5053.h)
 SET_TARGET_PROPERTIES(DXC-22-L PROPERTIES ENABLE_EXPORTS 1)
 # add syslibs dependencies to create the correct linker order
 TARGET_LINK_LIBRARIES(DXC-22-L -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys)

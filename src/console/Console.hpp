@@ -35,9 +35,15 @@ public:
     }
 
 protected:
-    BufferedSerial m_serial = { CONSOLE_TX, CONSOLE_RX, CONSOLE_BAUDRATE };
+    BufferedSerial m_serial = {
+        CONSOLE_TX,
+        CONSOLE_RX,
+        CONSOLE_BAUDRATE
+    };
 
-    EventQueue m_isrQueue = { CONSOLE_ISR_QUEUE_SZ * CONSOLE_ISR_EVENT_SZ };
+    EventQueue m_isrQueue = {
+        CONSOLE_ISR_QUEUE_SZ * CONSOLE_ISR_EVENT_SZ
+    };
 
 public:
     /**
@@ -125,6 +131,11 @@ public:
         }
     }
 
+    /**
+     * Console read wrapper
+     *
+     * @copydoc mbed::BufferedSerial::read(void*, size_t)
+     */
     ssize_t read(void* ptr, size_t sz)
     {
         return m_serial.read(ptr, sz);

@@ -15,9 +15,11 @@ void Context::tick()
         m_console.writelnf("tick=%d", m_ticks);
     #endif
 
+    handleMagnet();
+
     m_consoleInput.handleInput();
 
-    // @TODO: Read HAL501 Sensor and run throwPaper() when it senses a magnetic field
+    // @TODO: Read DRV5053 Sensor and run throwPaper() when it senses a magnetic field
 
     updateDrivingController();
 
@@ -87,4 +89,14 @@ inline void Context::throwPaper()
     m_paperThrower.execute();
 
     m_drivingController.start();
+}
+
+inline void Context::handleMagnet()
+{
+    DRV5053::SensorResponse data = m_hallEffectSensor.getData();
+
+    // If we have a magnetic field of 5 mT or more, throw
+    if(data.mT > 5.0f) {
+        throwPaper();
+    }
 }

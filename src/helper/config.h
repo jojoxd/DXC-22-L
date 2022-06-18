@@ -126,6 +126,8 @@
     #define DRCTL_SPEED_FAST 1.0f
     #define DRCTL_SPEED_SLOW 0.0f
 
+    #define DRV5053_SENSOR PinName::A3
+
     // Left Motor Config
     #define DRCTL_LEFTMOTOR_PWM PinName::D11
     #define DRCTL_LEFTMOTOR_DIR PinName::D12

@@ -8,6 +8,7 @@
 #include "controller/PaperThrower.h"
 #include "driver/MotorDriver.h"
 #include "helper/config.h"
+#include "sensor/DRV5053.h"
 #include "sensor/HCSR04.h"
 
 /**
@@ -62,6 +63,10 @@ protected:
         CNY70_RIGHT
     };
 
+    DRV5053 m_hallEffectSensor = {
+            DRV5053_SENSOR
+    };
+
     uint32_t m_ticks = 0;
 
 protected:
@@ -69,4 +74,6 @@ protected:
     inline void handleDistance();
 
     inline void throwPaper();
+
+    inline void handleMagnet();
 };
