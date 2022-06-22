@@ -37,20 +37,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9f8f9bd5-add6-41a6-8efe-13a756321a61" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.editorconfig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sensor/DRV5053.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sensor/DRV5053.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/arduino-project-settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/arduino-project-settings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/console/Console.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/console/Console.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/context/Context.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/Context.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/context/Context.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/Context.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/DrivingController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/DrivingController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/DrivingController.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/DrivingController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/driver/MotorDriver.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/driver/MotorDriver.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console/ConsoleInput.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/console/ConsoleInput.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/PaperThrower.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/PaperThrower.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/PaperThrower.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/PaperThrower.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/helper/config.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/helper/config.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sensor/CNY70Array.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/sensor/CNY70Array.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1115,7 +1107,7 @@
       </map>
     </option>
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug | Team 3" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug | Team 2" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -1268,6 +1260,7 @@
       <workItem from="1654265728619" duration="19078000" />
       <workItem from="1654348641062" duration="13128000" />
       <workItem from="1654363112077" duration="25442000" />
+      <workItem from="1655575736434" duration="5506000" />
     </task>
     <servers />
   </component>
@@ -1436,20 +1429,20 @@
     </state>
     <state x="1910" y="833" width="1608" height="963" key="editAsTableFormatDialogDimension/1440.560.2560.1440/0.0.1440.2560/4000.560.2560.1440@1440.560.2560.1440" timestamp="1654342832369" />
     <state x="4470" y="833" key="editAsTableFormatDialogDimension/1440.560.2560.1440/0.0.1440.2560/4000.560.2560.1440@4000.560.2560.1440" timestamp="1654276244808" />
-    <state x="1815" y="770" width="782" height="783" key="find.popup" timestamp="1654362718157">
+    <state x="1815" y="770" width="782" height="783" key="find.popup" timestamp="1655579187644">
       <screen x="1440" y="560" width="2560" height="1440" />
     </state>
-    <state x="1815" y="770" width="782" height="783" key="find.popup/1440.560.2560.1440/0.0.1440.2560/4000.560.2560.1440@1440.560.2560.1440" timestamp="1654362718157" />
+    <state x="1815" y="770" width="782" height="783" key="find.popup/1440.560.2560.1440/0.0.1440.2560/4000.560.2560.1440@1440.560.2560.1440" timestamp="1655579187644" />
     <state x="1815" y="879" width="782" height="783" key="find.popup/1440.669.2560.1440/0.0.1440.2560/4000.669.2560.1440@1440.669.2560.1440" timestamp="1651168381591" />
     <state x="2272" y="888" key="run.anything.popup" timestamp="1654354595506">
       <screen x="1440" y="560" width="2560" height="1440" />
     </state>
     <state x="624" y="236" key="run.anything.popup/0.0.1920.1036@0.0.1920.1036" timestamp="1654163466766" />
     <state x="2272" y="888" key="run.anything.popup/1440.560.2560.1440/0.0.1440.2560/4000.560.2560.1440@1440.560.2560.1440" timestamp="1654354595506" />
-    <state x="4943" y="919" width="672" height="678" key="search.everywhere.popup" timestamp="1652291298854">
+    <state x="4943" y="919" width="672" height="678" key="search.everywhere.popup" timestamp="1655576813991">
       <screen x="4000" y="560" width="2560" height="1440" />
     </state>
-    <state x="4943" y="919" width="672" height="678" key="search.everywhere.popup/1440.560.2560.1440/0.0.1440.2560/4000.560.2560.1440@4000.560.2560.1440" timestamp="1652291298854" />
+    <state x="4943" y="919" width="672" height="678" key="search.everywhere.popup/1440.560.2560.1440/0.0.1440.2560/4000.560.2560.1440@4000.560.2560.1440" timestamp="1655576813991" />
     <state x="2383" y="1028" width="672" height="678" key="search.everywhere.popup/1440.669.2560.1440/0.0.1440.2560/4000.669.2560.1440@1440.669.2560.1440" timestamp="1650888253210" />
   </component>
   <component name="XDebuggerManager">

@@ -6,6 +6,36 @@
 #include "console/Console.hpp"
 #include "driver/MotorDriver.h"
 
+#if defined(PAPERTHROWER_TRANSLATE)
+    #if !defined(PAPERTHROWER_TRANSLATE_MUL)
+        #define PAPERTHROWER_TRANSLATE_MUL 1.0f
+    #endif
+
+    #if defined(PAPERTHROWER_TRANSLATE_WATERMARKS)
+        #if !defined(PAPERTHROWER_TRANSLATE_WATERMARKS_LOW) || !defined(PAPERTHROWER_TRANSLATE_WATERMARKS_HIGH)
+            #error Both PaperThrower Watermarks should be set for watermarks to work
+        #endif
+
+        #if !defined(PAPERTHROWER_TRANSLATE_WATERMARKS_HIGH_PINMODE)
+            #define PAPERTHROWER_TRANSLATE_WATERMARKS_HIGH_PINMODE PinMode::PullDown
+        #endif
+
+        #if !defined(PAPERTHROWER_TRANSLATE_WATERMARKS_LOW_PINMODE)
+            #define PAPERTHROWER_TRANSLATE_WATERMARKS_LOW_PINMODE PinMode::PullDown
+        #endif
+    #endif
+#endif
+
+#if defined(PAPERTHROWER_THROW)
+    #if !defined(PAPERTHROWER_THROW_MUL)
+        #define PAPERTHROWER_THROW_MUL 1.0f
+    #endif
+
+    #if !defined(PAPERTHROWER_THROW_TICKS)
+        #define PAPERTHROWER_THROW_TICKS 50
+    #endif
+#endif
+
 /**
  * PaperThrower contains all logic pertaining throwing paper from the robot
  *
@@ -49,12 +79,12 @@ protected:
         #if defined(PAPERTHROWER_TRANSLATE_WATERMARKS)
             DigitalIn m_translateHighWatermark = {
                 PAPERTHROWER_TRANSLATE_WATERMARKS_HIGH,
-                PinMode::PullDown
+                PAPERTHROWER_TRANSLATE_WATERMARKS_HIGH_PINMODE
             };
 
             DigitalIn m_translateLowWatermark = {
                 PAPERTHROWER_TRANSLATE_WATERMARKS_LOW,
-                PinMode::PullDown
+                PAPERTHROWER_TRANSLATE_WATERMARKS_LOW_PINMODE
             };
         #endif
     #endif

@@ -5,6 +5,12 @@
 #include "helper/config.h"
 #include "console/Console.hpp"
 
+#if defined(CONSOLE_DISABLED)
+    #if defined(STARTUP_PAUSED)
+        #error Can not STARTUP_PAUSED when CONSOLE_DISABLED
+    #endif
+#endif
+
 /**
  * Handles Console Commands
  *

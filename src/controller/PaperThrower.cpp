@@ -22,10 +22,13 @@ inline void PaperThrower::raise()
 
     #if defined(PAPERTHROWER_TRANSLATE)
         #if defined(PAPERTHROWER_TRANSLATE_WATERMARKS)
+            // Should be optimized away
+            int checkCondition = PAPERTHROWER_TRANSLATE_WATERMARKS_HIGH_PINMODE == PinMode::PullDown ? 0 : 1;
+
             do {
                 m_translateMotor.setSpeed(1.0f);
                 ThisThread::sleep_for(1ms);
-            } while(m_translateHighWatermark.read() == 0);
+            } while(m_translateHighWatermark.read() == checkCondition);
 
             m_translateMotor.setSpeed(0.0f);
         #else
@@ -61,10 +64,13 @@ inline void PaperThrower::lower()
 
     #if defined(PAPERTHROWER_TRANSLATE)
         #if defined(PAPERTHROWER_TRANSLATE_WATERMARKS)
+            // Should be optimized away
+            int checkCondition = PAPERTHROWER_TRANSLATE_WATERMARKS_LOW_PINMODE == PinMode::PullDown ? 0 : 1;
+
             do {
                 m_translateMotor.setSpeed(-1.0f);
                 ThisThread::sleep_for(1ms);
-            } while(m_translateLowWatermark.read() == 0);
+            } while(m_translateLowWatermark.read() == checkCondition);
 
             m_translateMotor.setSpeed(0.0f);
         #else
