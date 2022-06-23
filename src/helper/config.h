@@ -61,6 +61,9 @@
 // End Stop length in cm (float)
 #define HCSR04_STOP_LENGTH 20.0f
 
+// @TODO: Map DRV5053, most likely will use center CNY70 channel (A1)
+#define DRV5053_SENSOR PinName::NC
+
 #if DXC_TEAM == 1
     /**
      * Robot with weird steering and extra thrower motor
