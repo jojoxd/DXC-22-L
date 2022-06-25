@@ -69,6 +69,13 @@ protected:
 
     uint32_t m_ticks = 0;
 
+    #if defined(HV_ENABLE)
+    public:
+        DigitalOut m_hvEnable = {
+            HV_ENABLE
+        };
+    #endif
+
 protected:
     inline void updateDrivingController();
     inline void handleDistance();

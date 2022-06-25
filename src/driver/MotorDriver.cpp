@@ -1,7 +1,7 @@
 #include "MotorDriver.h"
 
 MotorDriver::MotorDriver(PinName pwmPin, PinName directionPin, float speedMultiplier = 1.0f)
-    : m_pwmSignal(pwmPin), m_direction(directionPin),
+    : m_pwmSignal(pwmPin), m_direction(directionPin, PinMode::PullDown),
     m_speedMultiplier(speedMultiplier), m_movingAverageSpeed(), m_ticker()
 {
     m_pwmSignal.period_us(10);
@@ -12,11 +12,13 @@ MotorDriver::MotorDriver(PinName pwmPin, PinName directionPin, float speedMultip
 MotorDriver::MotorDriver(PinName pwmPin, PinName directionPin)
     : MotorDriver(pwmPin, directionPin, 1.0f)
 {
-    m_pwmSignal.period_us(10);
+    m_pwmSignal.period_us(40);
 }
 
 void MotorDriver::setSpeed(float speed)
 {
+    speed = speed * m_speedMultiplier;
+
     if(speed < 0.0f) {
         m_direction = 0;
     } else {
@@ -49,5 +51,5 @@ void MotorDriver::tick()
         }
     #endif
 
-    m_pwmSignal = fabs(speed) * m_speedMultiplier;
+    m_pwmSignal = fabs(speed);
 }

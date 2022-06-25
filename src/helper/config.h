@@ -46,7 +46,7 @@
 #define DATA_LOGGING
 
 // Require Computer Serial p<enter> signal to start
-#define STARTUP_PAUSED
+//#define STARTUP_PAUSED
 
 // Disable Console
 // #define CONSOLE_DISABLED
@@ -62,7 +62,7 @@
 #define HCSR04_STOP_LENGTH 20.0f
 
 // @TODO: Map DRV5053, most likely will use center CNY70 channel (A1)
-#define DRV5053_SENSOR PinName::NC
+#define DRV5053_SENSOR PinName::A2
 
 #if DXC_TEAM == 1
     /**
@@ -85,6 +85,15 @@
     #define PAPERTHROWER_TRANSLATE
 
     #define PAPERTHROWER_TRANSLATE_WATERMARKS
+
+    #define DRCTL_SPEED_FAST 0.8f
+    #define DRCTL_SPEED_SLOW 0.0f
+
+    #define DRCTL_LEFTMOTOR_MUL 1.0f
+
+    #define DRCTL_RIGHTMOTOR_MUL -1.0f
+
+    #define PAPERTHROWER_TRANSLATE_MUL 1.0f
 #endif
 
 #if DXC_TEAM == 3
@@ -147,27 +156,26 @@
      */
 
     // CNY Sensors {CNY_LEFT = PA_0 (A0), CNY_CENTER = PA_1 (A1), CNY_RIGHT = PA_3 (A2)}
-    #define CNY70_LEFT PinName::A0
-    #define CNY70_CENTER PinName::A1
-    #define CNY70_RIGHT PinName::A2
+    #define CNY70_LEFT PinName::A2
+    #define CNY70_CENTER PinName::A6
+    #define CNY70_RIGHT PinName::A1
 
     // Left Motor Config (Slot: M2) {M2_ENABLE = PF_0 (D7), M4_DIR = PF_1 (D8)}
-    #define DRCTL_LEFTMOTOR_PWM PinName::D7
-    #define DRCTL_LEFTMOTOR_DIR PinName::D8
-    #define DRCTL_LEFTMOTOR_MUL 1.0f
+    #define DRCTL_LEFTMOTOR_PWM PinName::D3
+    #define DRCTL_LEFTMOTOR_DIR PinName::D6
 
     // Right Motor Config (Slot: M4) {M4_ENABLE = PB_6 (D5), M4_DIR = PB_1 (D6)}
-    #define DRCTL_RIGHTMOTOR_PWM PinName::D5
-    #define DRCTL_RIGHTMOTOR_DIR PinName::D6
-    #define DRCTL_RIGHTMOTOR_MUL 0.7f
+    #define DRCTL_RIGHTMOTOR_PWM PinName::D7
+    #define DRCTL_RIGHTMOTOR_DIR PinName::D8
+
 
     #define HCSR04_TRIG PinName::D11
     #define HCSR04_ECHO PinName::D12
 
     // Translate Motor Config (Slot: M1, Shared w/ M3) {M1_ENABLE = PB_7 (D4), M1_DIR = PA_8 (D9)}
     // Optional, Enable with PAPERTHROWER_TRANSLATE
-    #define PAPERTHROWER_TRANSLATE_PWM PinName::D4
-    #define PAPERTHROWER_TRANSLATE_DIR PinName::D9
+    #define PAPERTHROWER_TRANSLATE_PWM PinName::D5
+    #define PAPERTHROWER_TRANSLATE_DIR PinName::D6
 
     // LIM1 {LIM1 = PA_9 (D1)}
     // Optional, Enable with PAPERTHROWER_TRANSLATE_WATERMARKS
@@ -179,8 +187,10 @@
 
     // Throw Motor Config (Slot: M3, Shared w/ M1) {M3_ENABLE = PB_0 (D3), M3_DIR = PA_8 (D9)}
     // Optional, Enable with PAPERTHROWER_THROW
-    #define PAPERTHROWER_THROW_PWM PinName::D3
+    #define PAPERTHROWER_THROW_PWM PinName::D4
     #define PAPERTHROWER_THROW_DIR PinName::D9
+
+    #define HV_ENABLE PinName::D2
 #endif
 
 

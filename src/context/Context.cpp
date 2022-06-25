@@ -32,9 +32,21 @@ void Context::tick()
 
 void Context::startup()
 {
+    #if defined(HV_ENABLE)
+        m_hvEnable = 1;
+    #endif
+
     #if defined(STARTUP_PAUSED)
         m_consoleInput.togglePause();
     #endif
+
+    m_consoleInput.attachPauseCallback([&](){
+        m_hvEnable = 0;
+    });
+
+    m_consoleInput.attachResumeCallback([&](){
+        m_hvEnable = 1;
+    });
 
     m_drivingController.start();
 }
