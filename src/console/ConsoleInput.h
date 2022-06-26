@@ -38,6 +38,8 @@ public:
 
     void togglePause();
 
+    bool isPaused() const;
+
 protected:
     Console& m_console = Console::getInstance();
 

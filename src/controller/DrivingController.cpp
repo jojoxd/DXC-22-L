@@ -45,8 +45,8 @@ void DrivingController::handleDriving()
     m_ticks++;
 
     if(m_bias == CNY70Array::Bias::Center) {
-        m_speedLeft = DRCTL_SPEED_FAST;
-        m_speedRight = DRCTL_SPEED_FAST;
+        m_speedLeft = DRCTL_SPEED_FORWARD;
+        m_speedRight = DRCTL_SPEED_FORWARD;
     }
 
     if(m_bias == CNY70Array::Bias::Left) {

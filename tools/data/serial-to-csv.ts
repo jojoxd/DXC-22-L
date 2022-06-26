@@ -7,6 +7,8 @@ import {SerialInput} from "./src/SerialInput";
 import {Input} from "./src/Input";
 import {resolve as resolvePath} from "path";
 import {FileInput} from "./src/FileInput";
+import {Writer} from "./src/Writer";
+import {ConsoleWriter} from "./src/ConsoleWriter";
 
 async function main()
 {
@@ -16,7 +18,8 @@ async function main()
 
     const lineParser = new LineParser();
 
-    const tsv = new TSVWriter(`data-${date}_${time}.tsv`);
+    // const writer: Writer = new TSVWriter(`data-${date}_${time}.tsv`);
+    const writer: Writer = new ConsoleWriter();
 
     let input: Input;
 
@@ -24,6 +27,10 @@ async function main()
         const tty = await SerialInput.find('0483', '374b');
         if(!tty)
             throw new Error("Failed to find serial console");
+
+        // console.log(`Connecting to ${tty}`);
+
+        await new Promise<void>((resolve) => { setTimeout(() => { resolve() }, 2000) });
 
         input = new SerialInput(tty);
     } else if(process.argv.includes("file")) {
@@ -34,17 +41,18 @@ async function main()
 
     let tickData = {};
     input.getStream().on("data", (data) => {
-        console.log(data);
+        //// console.log(data);
 
         const line = lineParser.parseLine(data);
+        writer.cacheOriginal(data);
 
-        console.log(line);
+        //// console.log(line);
 
         if(!line)
             return;
 
         if(!!line.tick) {
-            tsv.write(tickData as ParsedLine);
+            writer.write(tickData as ParsedLine);
 
             tickData = {};
         }
@@ -54,8 +62,15 @@ async function main()
 
     await input.sendSignal("p\n");
 
+    let sigintCount = 0;
     process.on("SIGINT", async () => {
-        await tsv.close();
+        // console.log("SIGINT");
+
+        if(sigintCount++ >= 5) {
+            process.exit();
+        }
+
+        await writer.close();
         await input?.sendSignal("p\n"); // pause
 
         setTimeout(() => {

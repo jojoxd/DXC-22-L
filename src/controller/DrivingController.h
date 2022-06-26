@@ -76,4 +76,6 @@ protected:
     void onPause();
 
     void onResume();
+
+    friend class PaperThrower;
 };

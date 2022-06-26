@@ -9,6 +9,10 @@
     #define DRIVER_METHOD 0
 #endif
 
+#ifndef DRIVER_PERIOD_US
+    #define DRIVER_PERIOD_US 400
+#endif
+
 /**
  * A Motor Driver implementation
  * Controls the speed and direction of a motor using an L293D/L293N H-bridge
@@ -31,6 +35,7 @@ public:
 
     MotorDriver(PinName pwmPin, PinName directionPin);
     MotorDriver(PinName pwmPin, PinName directionPin, float speedMultiplier);
+    MotorDriver(PinName pwmPin, PinName directionPin, float speedMultiplier, int pwmPeriodUS);
 
     ~MotorDriver() = default;
 

@@ -9,7 +9,22 @@ export class SerialInput implements Input
 
     constructor(path: string)
     {
-        this.port = new SerialPort({ path: path, baudRate: 115200 });
+        this.port = new SerialPort({ path: path, baudRate: 115200 }, (err) => {
+            if(err) {
+                console.warn("Connection Error:", err);
+                return;
+            }
+
+            // console.log(`Connected to ${path}`);
+        });
+
+        this.port.on("close", () => {
+            // console.log(`Connection to ${path} closed`);
+        });
+
+        this.port.on("error", (err) => {
+            console.warn("Connection Error:", err);
+        })
     }
 
     getStream(): Readable

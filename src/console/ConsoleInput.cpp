@@ -101,3 +101,8 @@ void ConsoleInput::runThrowCallback()
         m_throwCallback();
     }
 }
+
+bool ConsoleInput::isPaused() const
+{
+    return m_isPaused || m_isResetting;
+}

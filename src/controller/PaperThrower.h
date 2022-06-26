@@ -11,6 +11,18 @@
         #define PAPERTHROWER_TRANSLATE_MUL 1.0f
     #endif
 
+    #if !defined(PAPERTHROWER_TRANSLATE_PWM_US)
+        #define PAPERTHROWER_TRANSLATE_PWM_US 35000
+    #endif
+
+    #if !defined(PAPERTHROWER_TRANSLATE_UP_SPEED)
+        #define PAPERTHROWER_TRANSLATE_UP_SPEED 1.0f
+    #endif
+
+    #if !defined(PAPERTHROWER_TRANSLATE_DOWN_SPEED)
+        #define PAPERTHROWER_TRANSLATE_DOWN_SPEED -0.2f
+    #endif
+
     #if defined(PAPERTHROWER_TRANSLATE_WATERMARKS)
         #if !defined(PAPERTHROWER_TRANSLATE_WATERMARKS_LOW) || !defined(PAPERTHROWER_TRANSLATE_WATERMARKS_HIGH)
             #error Both PaperThrower Watermarks should be set for watermarks to work
@@ -64,7 +76,7 @@ public:
     ~PaperThrower() = default;
 
 public:
-    void execute();
+    int execute(int currentTick);
 
 protected:
     Console& m_console;
@@ -73,7 +85,8 @@ protected:
         MotorDriver m_translateMotor = {
             PAPERTHROWER_TRANSLATE_PWM,
             PAPERTHROWER_TRANSLATE_DIR,
-            PAPERTHROWER_TRANSLATE_MUL
+            PAPERTHROWER_TRANSLATE_MUL,
+            PAPERTHROWER_TRANSLATE_PWM_US
         };
 
         #if defined(PAPERTHROWER_TRANSLATE_WATERMARKS)
@@ -98,9 +111,9 @@ protected:
     #endif
 
 protected:
-    inline void raise();
+    inline void raise(int tick);
 
-    inline void throwPaper();
+    inline void throwPaper(int tick);
 
-    inline void lower();
+    inline void lower(int tick);
 };

@@ -1,14 +1,17 @@
 import {createWriteStream, WriteStream} from "fs";
 import {ParsedLine} from "./ParsedLine";
+import {Writer} from "./Writer";
 
 
-export class TSVWriter
+export class TSVWriter implements Writer
 {
     protected fd: WriteStream;
 
     constructor(fileName: string)
     {
         this.fd = createWriteStream(fileName, { flags: 'as' });
+
+        this.writeHeader();
     }
 
     protected writeHeader()
@@ -55,5 +58,9 @@ export class TSVWriter
                 else resolve();
             });
         });
+    }
+
+    public cacheOriginal(line: string)
+    {
     }
 }

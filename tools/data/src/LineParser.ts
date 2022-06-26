@@ -9,20 +9,21 @@ export class LineParser
     public parseLine(line: string): ParsedLine | null
     {
         if(line.length === 0) {
-            console.log("Input line length = 0");
+            // console.log("Input line length = 0");
             return null;
         }
 
         const data = line.match(new RegExp(LineParser.regex));
 
         if(!data) {
-            console.log(`Regex failed for '${line}'`);
+            // console.log(`Regex failed for '${line}'`);
             return null;
         }
 
         return {
             timestamp: Number(data[1]),
             context: data[2],
+            original: line,
 
             ...this.parseExtraData(data[3])
         };
@@ -30,7 +31,11 @@ export class LineParser
 
     protected parseExtraData(input: string): any
     {
-        const mergeData: ExtraData = {};
+        const mergeData: ExtraData = {
+            'paper-thrower/raise': false,
+            'paper-thrower/throw': false,
+            'paper-thrower/lower': false,
+        };
 
         const keypairs = input.split(", ");
         for(const keypair of keypairs) {
@@ -52,6 +57,18 @@ export class LineParser
                         data = LineParser.convertIntoNumberWithUnit(data, "mV");
                         break;
 
+                    case 'drv5053/pole':
+                        data = LineParser.convertDRV5053Pole(data);
+                        break;
+
+                    case 'drv5053/voltage':
+                        data = LineParser.convertIntoNumberWithUnit(data, "mV");
+                        break;
+
+                    case 'drv5053/tesla':
+                        data = LineParser.convertIntoNumberWithUnit(data, "mT");
+                        break;
+
                     case 'hc-sr04/distance':
                         data = LineParser.convertIntoNumberWithUnit(data, "cm");
                         break;
@@ -59,6 +76,10 @@ export class LineParser
                     case 'drctl/leftSpeed':
                     case 'drctl/rightSpeed':
                         data = LineParser.convertIntoNumberWithUnit(data, "%");
+                        break;
+
+                    case 'pause':
+                        data = true;
                         break;
 
                     default:
@@ -82,6 +103,14 @@ export class LineParser
             "1": "center",
             "2": "right"
         }[bias] ?? null);
+    }
+
+    protected static convertDRV5053Pole(pole: string): string | null
+    {
+        return ({
+            "0": "North",
+            "1": "South"
+        }[pole] ?? null);
     }
 
     protected static convertIntoNumberWithUnit(data: string, unit: string): { value: number, unit: string }

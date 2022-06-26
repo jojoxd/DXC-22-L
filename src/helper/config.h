@@ -37,10 +37,10 @@
 #define CONSOLE_ISR_QUEUE_SZ 32
 
 // 0=absolute or 1=relative
-#define CNY70_TYPE 0
+#define CNY70_TYPE 1
 
 // 0=instant or 1=average
-#define DRIVER_METHOD 1
+#define DRIVER_METHOD 0
 
 // Enable data logging
 #define DATA_LOGGING
@@ -56,13 +56,10 @@
  */
 
 // Driver Controller Ticker interval
-#define DRCTL_TICKER_INTERVAL 100ms
+#define DRCTL_TICKER_INTERVAL 10ms
 
 // End Stop length in cm (float)
 #define HCSR04_STOP_LENGTH 20.0f
-
-// @TODO: Map DRV5053, most likely will use center CNY70 channel (A1)
-#define DRV5053_SENSOR PinName::A2
 
 #if DXC_TEAM == 1
     /**
@@ -86,14 +83,30 @@
 
     #define PAPERTHROWER_TRANSLATE_WATERMARKS
 
-    #define DRCTL_SPEED_FAST 0.8f
-    #define DRCTL_SPEED_SLOW 0.0f
+    // Outer Corner Speed
+    #define DRCTL_SPEED_FAST 0.7f
 
-    #define DRCTL_LEFTMOTOR_MUL 1.0f
+    // Inner Corner Speed
+    #define DRCTL_SPEED_SLOW -0.6f
 
-    #define DRCTL_RIGHTMOTOR_MUL -1.0f
+    // Forward speed
+    #define DRCTL_SPEED_FORWARD 0.4f
 
-    #define PAPERTHROWER_TRANSLATE_MUL 1.0f
+    #define DRCTL_MUL 0.7f
+
+    #define DRCTL_LEFTMOTOR_MUL (1.3f * DRCTL_MUL)
+
+    #define DRCTL_RIGHTMOTOR_MUL (-0.8f * DRCTL_MUL)
+
+    #define PAPERTHROWER_TRANSLATE_MUL -1.0f
+
+    #define DRCTL_MOTOR_PERIOD_US 35000
+    #define PAPERTHROWER_TRANSLATE_PWM_US 10000
+
+    #define PAPERTHROWER_TRANSLATE_UP_SPEED 1.0f
+    #define PAPERTHROWER_TRANSLATE_DOWN_SPEED 0.1f
+
+    #define CNY70_RELATIVE_DELTA 0.3f
 #endif
 
 #if DXC_TEAM == 3
@@ -161,7 +174,7 @@
     #define CNY70_RIGHT PinName::A1
 
     // Left Motor Config (Slot: M2) {M2_ENABLE = PF_0 (D7), M4_DIR = PF_1 (D8)}
-    #define DRCTL_LEFTMOTOR_PWM PinName::D3
+    #define DRCTL_LEFTMOTOR_PWM PinName::D5
     #define DRCTL_LEFTMOTOR_DIR PinName::D6
 
     // Right Motor Config (Slot: M4) {M4_ENABLE = PB_6 (D5), M4_DIR = PB_1 (D6)}
@@ -174,8 +187,8 @@
 
     // Translate Motor Config (Slot: M1, Shared w/ M3) {M1_ENABLE = PB_7 (D4), M1_DIR = PA_8 (D9)}
     // Optional, Enable with PAPERTHROWER_TRANSLATE
-    #define PAPERTHROWER_TRANSLATE_PWM PinName::D5
-    #define PAPERTHROWER_TRANSLATE_DIR PinName::D6
+    #define PAPERTHROWER_TRANSLATE_PWM PinName::D3
+    #define PAPERTHROWER_TRANSLATE_DIR PinName::D9
 
     // LIM1 {LIM1 = PA_9 (D1)}
     // Optional, Enable with PAPERTHROWER_TRANSLATE_WATERMARKS
@@ -191,6 +204,8 @@
     #define PAPERTHROWER_THROW_DIR PinName::D9
 
     #define HV_ENABLE PinName::D2
+
+    #define DRV5053_SENSOR PinName::A0
 #endif
 
 

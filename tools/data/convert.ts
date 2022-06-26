@@ -94,7 +94,7 @@ for(let line of lines) {
         tick = Number(pl.tick);
     }
 
-    console.log(pl);
+    // console.log(pl);
 
     const map = tickMap.get(tick) ?? [];
 

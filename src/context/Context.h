@@ -11,6 +11,10 @@
 #include "sensor/DRV5053.h"
 #include "sensor/HCSR04.h"
 
+#if !defined(DRCTL_MOTOR_PERIOD_US)
+    #define DRCTL_MOTOR_PERIOD_US 35000
+#endif
+
 /**
  * Main Application Context
  *
@@ -31,13 +35,15 @@ protected:
     MotorDriver m_leftMotor = {
         DRCTL_LEFTMOTOR_PWM,
         DRCTL_LEFTMOTOR_DIR,
-        DRCTL_LEFTMOTOR_MUL
+        DRCTL_LEFTMOTOR_MUL,
+        DRCTL_MOTOR_PERIOD_US
     };
 
     MotorDriver m_rightMotor = {
         DRCTL_RIGHTMOTOR_PWM,
         DRCTL_RIGHTMOTOR_DIR,
-        DRCTL_RIGHTMOTOR_MUL
+        DRCTL_RIGHTMOTOR_MUL,
+        DRCTL_MOTOR_PERIOD_US
     };
 
     PaperThrower m_paperThrower;

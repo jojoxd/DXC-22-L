@@ -4,26 +4,26 @@ MotorDriver::MotorDriver(PinName pwmPin, PinName directionPin, float speedMultip
     : m_pwmSignal(pwmPin), m_direction(directionPin, PinMode::PullDown),
     m_speedMultiplier(speedMultiplier), m_movingAverageSpeed(), m_ticker()
 {
-    m_pwmSignal.period_us(10);
+    m_pwmSignal.period_us(DRIVER_PERIOD_US);
 
-    m_ticker.attach(callback(this, &MotorDriver::tick), 10ms);
+    m_ticker.attach(callback(this, &MotorDriver::tick), 300ms);
 }
 
 MotorDriver::MotorDriver(PinName pwmPin, PinName directionPin)
     : MotorDriver(pwmPin, directionPin, 1.0f)
 {
-    m_pwmSignal.period_us(40);
+    m_pwmSignal.period_us(DRIVER_PERIOD_US);
+}
+
+MotorDriver::MotorDriver(PinName pwmPin, PinName directionPin, float speedMultiplier, int pwmPeriodUS)
+    : MotorDriver(pwmPin, directionPin, speedMultiplier)
+{
+    m_pwmSignal.period_us(pwmPeriodUS);
 }
 
 void MotorDriver::setSpeed(float speed)
 {
     speed = speed * m_speedMultiplier;
-
-    if(speed < 0.0f) {
-        m_direction = 0;
-    } else {
-        m_direction = 1;
-    }
 
     m_speed = speed;
 }
@@ -50,6 +50,12 @@ void MotorDriver::tick()
             speed = 0.0f;
         }
     #endif
+
+    if(speed < 0.0f) {
+        m_direction = 0;
+    } else {
+        m_direction = 1;
+    }
 
     m_pwmSignal = fabs(speed);
 }

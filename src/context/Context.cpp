@@ -98,14 +98,19 @@ inline void Context::throwPaper()
 {
     m_drivingController.stop();
 
-    m_paperThrower.execute();
+    m_ticks = m_paperThrower.execute(m_ticks) + 1;
 
-    m_drivingController.start();
+    if(!m_consoleInput.isPaused())
+        m_drivingController.start();
 }
 
 inline void Context::handleMagnet()
 {
     DRV5053::SensorResponse data = m_hallEffectSensor.getData();
+
+    #if defined(DATA_LOGGING)
+        m_console.writelnf("drv5053/voltage=%imV, drv5053/tesla=%imT, drv5053/pole=%i", (int)(data.voltage * 1000), (int)data.mT, data.pole);
+    #endif
 
     // If we have a magnetic field of 5 mT or more, throw
     if(data.mT > 5.0f) {

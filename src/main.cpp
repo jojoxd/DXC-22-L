@@ -32,6 +32,6 @@
     while(true) {
         context.tick();
 
-        ThisThread::sleep_for(DRCTL_TICKER_INTERVAL / 2);
+        ThisThread::sleep_for(DRCTL_TICKER_INTERVAL / 3);
     }
 }

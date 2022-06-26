@@ -16,8 +16,8 @@ public:
 
     enum Pole
     {
-        North,
-        South
+        North = 0,
+        South = 1
     };
 
     struct SensorResponse
