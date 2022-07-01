@@ -1,40 +1,37 @@
 #include <mbed.h>
 
-#include "helper/macros.h"
-#include "console.hpp"
+#include "helper/config.h"
+#include "console/Console.hpp"
+#include "context/Context.h"
 
-void test1(Console* console)
-{
-    console->writeln("TEST1 TEST1 TEST1 >>>>>>>>>>>>>>>>>>>>");
-}
-
-void consoleInput(void* buffer)
-{
-    Console::getInstance().writelnf("consoleInput() called (%s)", (char*)buffer);
-}
-
-int main()
+[[noreturn]] int main()
 {
     Console& console = Console::getInstance();
 
+    Context context;
+
+    console.writeln(CONSOLE_TITLE);
+
     #ifdef DXC_TEAM_1
         // Team 1 Custom Code
-        console.writeln("Team 1");
+//        console.writeln("Team 1");
     #endif
 
     #ifdef DXC_TEAM_2
         // Team 2 Custom Code
-        console.writeln("Team 2");
+//        console.writeln("Team 2");
     #endif
 
     #ifdef DXC_TEAM_3
         // Team 3 Custom Code
-        console.writeln("Team 3");
+        console.writeln("Small Test Robot");
     #endif
 
-    while(true) {
-        ThisThread::sleep_for(1000ms);
-    }
+    context.startup();
 
-    return 0;
+    while(true) {
+        context.tick();
+
+        ThisThread::sleep_for(DRCTL_TICKER_INTERVAL / 3);
+    }
 }

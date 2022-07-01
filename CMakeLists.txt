@@ -2637,12 +2637,29 @@ ADD_EXECUTABLE(DXC-22-L
   lib/mbed-os/targets/TARGET_STM/us_ticker_defines.h
   lib/mbed-os/targets/TARGET_STM/watchdog_api.c
   mbed_config.h
-  src/console.hpp
+  src/console/Console.hpp
+  src/console/ConsoleInput.cpp
+  src/console/ConsoleInput.h
+  src/controller/DrivingController.cpp
+  src/controller/DrivingController.h
+  src/controller/PaperThrower.cpp
+  src/controller/PaperThrower.h
+  src/driver/MotorDriver.cpp
+  src/driver/MotorDriver.h
   src/helper/config.h
   src/helper/macros.h
+  src/sensor/CNY70.cpp
+  src/sensor/CNY70.h
+  src/sensor/CNY70Array.cpp
+  src/sensor/CNY70Array.h
+  src/sensor/HCSR04.cpp
+  src/sensor/HCSR04.h
+  src/context/Context.cpp
+  src/context/Context.h
   src/main.cpp
   src/util.hpp
-)
+  src/sensor/DRV5053.cpp
+  src/sensor/DRV5053.h)
 SET_TARGET_PROPERTIES(DXC-22-L PROPERTIES ENABLE_EXPORTS 1)
 # add syslibs dependencies to create the correct linker order
 TARGET_LINK_LIBRARIES(DXC-22-L -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys)

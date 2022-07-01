@@ -4,9 +4,6 @@ BUILD
 cmake-build*
 __pycache__
 
-# IDE folders
-.idea
-
 # Log files
 openocd.log
 
